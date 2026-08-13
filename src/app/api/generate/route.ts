@@ -1,0 +1,50 @@
+import { NextResponse } from "next/server";
+import { AppError, logOperationalError, publicErrorBody, toAppError } from "@/lib/errors";
+import { generateConsequences } from "@/lib/gemini/generate-consequences";
+import { enforceRateLimit } from "@/lib/rate-limit";
+import { verifyTurnstileIfConfigured } from "@/lib/turnstile";
+import { generateRequestSchema } from "@/schemas/generator";
+
+const MAX_BODY_BYTES = 8_192;
+
+export async function POST(request: Request): Promise<Response> {
+  const startedAt = Date.now();
+
+  try {
+    const contentLength = request.headers.get("content-length");
+    if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
+      throw new AppError("VALIDATION_ERROR", 400, { step: "payload" });
+    }
+
+    let json: unknown;
+    try {
+      json = await request.json();
+    } catch {
+      throw new AppError("VALIDATION_ERROR", 400, { step: "payload" });
+    }
+
+    const parsed = generateRequestSchema.safeParse(json);
+    if (!parsed.success) {
+      throw new AppError("VALIDATION_ERROR", 400, { step: "payload" });
+    }
+
+    await verifyTurnstileIfConfigured(parsed.data.turnstileToken);
+    await enforceRateLimit(request);
+
+    const result = await generateConsequences(parsed.data);
+    return NextResponse.json(result);
+  } catch (error) {
+    const appError = error instanceof AppError ? error : toAppError(error);
+    if (!(error instanceof AppError) || appError.code === "INTERNAL_ERROR") {
+      logOperationalError("generate_unhandled", {
+        code: appError.code,
+        step: appError.step ?? "unexpected",
+        status: appError.status,
+        durationMs: Date.now() - startedAt,
+      });
+    }
+    return NextResponse.json(publicErrorBody(appError), {
+      status: appError.status,
+    });
+  }
+}
