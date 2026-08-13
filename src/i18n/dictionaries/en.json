@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "homeTitle": "PlotRipple — AI Consequence Generator for Tabletop RPGs",
+    "homeDescription": "Free, system-agnostic consequence generator for tabletop RPG game masters. Turn player decisions into immediate, next-session, and long-term story outcomes.",
+    "aboutTitle": "About PlotRipple",
+    "aboutDescription": "PlotRipple is a free international portal of tools for tabletop RPG game masters. Learn what the consequence generator does and what comes next.",
+    "privacyTitle": "Privacy — PlotRipple",
+    "privacyDescription": "How PlotRipple handles the text you submit, local history, analytics, and future advertising. This page is an initial draft.",
+    "termsTitle": "Terms of Use — PlotRipple",
+    "termsDescription": "Initial terms for using PlotRipple’s free narrative tools. This page is a draft and not legal advice."
+  },
+  "brand": {
+    "name": "PlotRipple",
+    "tagline": "Every choice changes the story.",
+    "lead": "Turn player choices into meaningful consequences."
+  },
+  "nav": {
+    "home": "Generator",
+    "about": "About",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "language": "Language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "hero": {
+    "eyebrow": "Narrative workshop",
+    "helper": "Describe a decision. Choose tone and scale. Receive consequences you can drop into the next scene — or the next season."
+  },
+  "ads": {
+    "label": "Advertisement"
+  },
+  "generator": {
+    "title": "Consequence generator",
+    "eventLabel": "What happened",
+    "eventHint": "Describe the decision or event in play. Avoid names, secrets, or personal details.",
+    "eventPlaceholder": "The party spared the captured scout and sent them back with a warning.",
+    "characterCount": "{count} / {max} characters",
+    "toneLabel": "Tone",
+    "intensityLabel": "Intensity",
+    "settingLabel": "Setting",
+    "timeframeLabel": "Timeframe",
+    "timeframeHint": "Long term returns only long-term ripples. Mixed spreads immediate, next-session, and long-term.",
+    "countLabel": "How many consequences",
+    "submit": "Generate consequences",
+    "generating": "Weaving consequences…",
+    "tones": {
+      "dark": "Dark",
+      "heroic": "Heroic",
+      "political": "Political",
+      "mysterious": "Mysterious",
+      "comedic": "Comedic"
+    },
+    "intensities": {
+      "light": "Light",
+      "moderate": "Moderate",
+      "severe": "Severe"
+    },
+    "settings": {
+      "fantasy": "Fantasy",
+      "horror": "Horror",
+      "science_fiction": "Science fiction",
+      "contemporary": "Contemporary",
+      "generic": "Generic"
+    },
+    "timeframes": {
+      "immediate": "Immediate",
+      "next_session": "Next session",
+      "long_term": "Long term",
+      "mixed": "Mixed"
+    },
+    "counts": {
+      "3": "3 consequences",
+      "5": "5 consequences"
+    },
+    "validation": {
+      "tooShort": "Write at least 20 characters so the generator has enough to work with.",
+      "tooLong": "Keep the description to 1,000 characters or fewer.",
+      "required": "This field is required."
+    }
+  },
+  "result": {
+    "title": "Consequences",
+    "empty": "Results appear here after you generate. The form stays on the left so you can refine the decision.",
+    "summaryLabel": "Situation",
+    "copy": "Copy all",
+    "copied": "Copied",
+    "copyFailed": "Could not copy. Select the text instead.",
+    "regenerate": "Generate again",
+    "timeframes": {
+      "immediate": "Immediate",
+      "next_session": "Next session",
+      "long_term": "Long term"
+    },
+    "categories": {
+      "social": "Social",
+      "political": "Political",
+      "economic": "Economic",
+      "personal": "Personal",
+      "supernatural": "Supernatural",
+      "environmental": "Environmental"
+    },
+    "triggerLabel": "Trigger",
+    "affectedLabel": "Affected parties"
+  },
+  "history": {
+    "title": "Recent on this device",
+    "empty": "No local history yet.",
+    "clear": "Clear history",
+    "open": "Open",
+    "notice": "History stays on this device. It is not sent to the server."
+  },
+  "editorial": {
+    "title": "How to turn player choices into memorable consequences",
+    "intro": "A good consequence feels inevitable in hindsight. It follows from what happened, who noticed, and what they can actually do about it.",
+    "items": [
+      {
+        "title": "Coherence over punishment",
+        "body": "Consequences should match the action, not just tax the players. A spared enemy can become a debt, a rumor, or an unexpected ally."
+      },
+      {
+        "title": "People react to what they know",
+        "body": "NPCs and factions only respond to what they witnessed, deduced, or were told. Hidden deeds stay hidden until someone finds a thread."
+      },
+      {
+        "title": "Leave doors open",
+        "body": "A consequence can create a job, a bargain, a sanctuary, or a new route through the world — not only a cost."
+      },
+      {
+        "title": "Let the future arrive",
+        "body": "Something that ripples into next session, or a season later, makes the setting feel alive instead of reset between games."
+      }
+    ]
+  },
+  "tools": {
+    "title": "More tools for the table",
+    "soon": "Coming soon",
+    "items": [
+      {
+        "id": "rumor-generator",
+        "name": "Rumor Generator",
+        "blurb": "Half-true whispers that factions already believe."
+      },
+      {
+        "id": "complication-generator",
+        "name": "Complication Generator",
+        "blurb": "Pressure that complicates a plan without shutting it down."
+      },
+      {
+        "id": "quest-generator",
+        "name": "Quest Generator",
+        "blurb": "Jobs that grow out of earlier choices, not random bulletin boards."
+      }
+    ]
+  },
+  "about": {
+    "title": "About PlotRipple",
+    "lead": "PlotRipple is an international portal of free tools for tabletop RPG game masters. The first tool turns a player decision into structured narrative consequences.",
+    "body": [
+      "It is built for traffic and useful craft, not as a SaaS product. There is no account, no campaign database, and no subscription.",
+      "The generator is system-agnostic. It does not teach or enforce the rules of any published game.",
+      "Later tools will follow the same idea: small, focused aids you can use between sessions or at the table."
+    ]
+  },
+  "privacy": {
+    "title": "Privacy",
+    "draftNotice": "This page is an initial draft. It is not a substitute for legal review.",
+    "sections": [
+      {
+        "title": "What you type",
+        "body": "The description you submit is sent to an external AI service so the generator can return consequences. Do not enter personal, confidential, or sensitive information. Treat the field as fiction for the table, not as a place for real names, contact details, or private facts."
+      },
+      {
+        "title": "Local history",
+        "body": "The last few generations may be stored in your browser on this device so you can reopen them. That history is not uploaded automatically."
+      },
+      {
+        "title": "Analytics and ads",
+        "body": "Analytics and advertising may be configured later. If they are enabled, they will not include the text you typed or the generated story text."
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of use",
+    "draftNotice": "This page is an initial draft. It is not legal advice and does not replace a reviewed agreement.",
+    "sections": [
+      {
+        "title": "The tools are free drafts",
+        "body": "PlotRipple provides free, experimental writing aids for game masters. Generated text is a starting point. You decide what reaches the table."
+      },
+      {
+        "title": "No accounts",
+        "body": "You can use the generator without creating an account. We do not store campaigns or user profiles on a server for this MVP."
+      },
+      {
+        "title": "Acceptable use",
+        "body": "Do not use the generator to create or seek illegal content, to submit other people’s personal data, or to overload the service."
+      },
+      {
+        "title": "Availability",
+        "body": "The service may change, pause, or apply usage limits. AI output can be wrong, uneven, or unusable for your table."
+      }
+    ]
+  },
+  "footer": {
+    "rights": "A narrative workshop for game masters.",
+    "independent": "Independent of published RPG systems."
+  },
+  "errors": {
+    "VALIDATION_ERROR": "Check the form. Something is missing or outside the allowed options.",
+    "BOT_VERIFICATION_FAILED": "Verification failed. Refresh the page and try again.",
+    "RATE_LIMITED": "This device has reached the current generation limit. Try again later.",
+    "AI_UNAVAILABLE": "The generator is unavailable right now. Try again in a moment.",
+    "INVALID_AI_RESPONSE": "The generator returned an unusable result. Try again with a clearer description.",
+    "INTERNAL_ERROR": "Something went wrong. Try again shortly.",
+    "network": "Could not reach the generator. Check your connection and try again."
+  }
+}

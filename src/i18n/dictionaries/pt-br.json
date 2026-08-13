@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "homeTitle": "PlotRipple — Gerador de Consequências para RPG de Mesa",
+    "homeDescription": "Gerador gratuito e independente de sistema para mestres de RPG de mesa. Transforme decisões dos jogadores em consequências imediatas, da próxima sessão e de longo prazo.",
+    "aboutTitle": "Sobre a PlotRipple",
+    "aboutDescription": "A PlotRipple é um portal internacional de ferramentas gratuitas para mestres de RPG de mesa. Veja o que o gerador de consequências faz e o que vem a seguir.",
+    "privacyTitle": "Privacidade — PlotRipple",
+    "privacyDescription": "Como a PlotRipple trata o texto enviado, o histórico local, analytics e publicidade futura. Esta página é um rascunho inicial.",
+    "termsTitle": "Termos de uso — PlotRipple",
+    "termsDescription": "Termos iniciais para o uso das ferramentas narrativas gratuitas da PlotRipple. Esta página é um rascunho e não substitui revisão jurídica."
+  },
+  "brand": {
+    "name": "PlotRipple",
+    "tagline": "Toda escolha muda a história.",
+    "lead": "Transforme as escolhas dos jogadores em consequências memoráveis."
+  },
+  "nav": {
+    "home": "Gerador",
+    "about": "Sobre",
+    "privacy": "Privacidade",
+    "terms": "Termos",
+    "language": "Idioma",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "hero": {
+    "eyebrow": "Oficina narrativa",
+    "helper": "Descreva uma decisão. Escolha tom e escala. Receba consequências para a próxima cena — ou para a próxima temporada."
+  },
+  "ads": {
+    "label": "Publicidade"
+  },
+  "generator": {
+    "title": "Gerador de consequências",
+    "eventLabel": "O que aconteceu",
+    "eventHint": "Descreva a decisão ou o evento em jogo. Evite nomes reais, segredos ou dados pessoais.",
+    "eventPlaceholder": "O grupo poupou o batedor capturado e o mandou de volta com um aviso.",
+    "characterCount": "{count} / {max} caracteres",
+    "toneLabel": "Tom",
+    "intensityLabel": "Intensidade",
+    "settingLabel": "Ambientação",
+    "timeframeLabel": "Alcance temporal",
+    "timeframeHint": "Longo prazo devolve só consequências de longo prazo. Misto combina imediato, próxima sessão e longo prazo.",
+    "countLabel": "Quantidade de consequências",
+    "submit": "Gerar consequências",
+    "generating": "Tecendo consequências…",
+    "tones": {
+      "dark": "Sombrio",
+      "heroic": "Heroico",
+      "political": "Político",
+      "mysterious": "Misterioso",
+      "comedic": "Cômico"
+    },
+    "intensities": {
+      "light": "Leve",
+      "moderate": "Moderada",
+      "severe": "Severa"
+    },
+    "settings": {
+      "fantasy": "Fantasia",
+      "horror": "Horror",
+      "science_fiction": "Ficção científica",
+      "contemporary": "Contemporâneo",
+      "generic": "Genérico"
+    },
+    "timeframes": {
+      "immediate": "Imediato",
+      "next_session": "Próxima sessão",
+      "long_term": "Longo prazo",
+      "mixed": "Misto"
+    },
+    "counts": {
+      "3": "3 consequências",
+      "5": "5 consequências"
+    },
+    "validation": {
+      "tooShort": "Escreva pelo menos 20 caracteres para o gerador ter material suficiente.",
+      "tooLong": "Mantenha a descrição em no máximo 1.000 caracteres.",
+      "required": "Este campo é obrigatório."
+    }
+  },
+  "result": {
+    "title": "Consequências",
+    "empty": "Os resultados aparecem aqui depois da geração. O formulário permanece visível para você ajustar a decisão.",
+    "summaryLabel": "Situação",
+    "copy": "Copiar tudo",
+    "copied": "Copiado",
+    "copyFailed": "Não foi possível copiar. Selecione o texto manualmente.",
+    "regenerate": "Gerar novamente",
+    "timeframes": {
+      "immediate": "Imediato",
+      "next_session": "Próxima sessão",
+      "long_term": "Longo prazo"
+    },
+    "categories": {
+      "social": "Social",
+      "political": "Político",
+      "economic": "Econômico",
+      "personal": "Pessoal",
+      "supernatural": "Sobrenatural",
+      "environmental": "Ambiental"
+    },
+    "triggerLabel": "Gatilho",
+    "affectedLabel": "Partes afetadas"
+  },
+  "history": {
+    "title": "Recentes neste dispositivo",
+    "empty": "Ainda não há histórico local.",
+    "clear": "Limpar histórico",
+    "open": "Abrir",
+    "notice": "O histórico fica só neste dispositivo. Ele não é enviado ao servidor."
+  },
+  "editorial": {
+    "title": "Como transformar escolhas em consequências memoráveis",
+    "intro": "Uma boa consequência parece inevitável depois. Ela segue do que aconteceu, de quem percebeu e do que essa gente realmente pode fazer.",
+    "items": [
+      {
+        "title": "Coerência, não só punição",
+        "body": "A consequência deve caber na ação, não apenas cobrar os jogadores. Um inimigo poupado pode virar dívida, rumor ou aliado inesperado."
+      },
+      {
+        "title": "Pessoas reagem ao que sabem",
+        "body": "NPCs e facções só respondem ao que viram, deduziram ou ouviram. O que ficou escondido continua escondido até alguém achar um fio."
+      },
+      {
+        "title": "Deixe portas abertas",
+        "body": "Uma consequência pode criar trabalho, barganha, refúgio ou um novo caminho no mundo — não apenas um custo."
+      },
+      {
+        "title": "Deixe o futuro chegar",
+        "body": "Algo que ecoa na próxima sessão, ou numa temporada seguinte, faz o mundo parecer vivo em vez de reiniciado entre jogos."
+      }
+    ]
+  },
+  "tools": {
+    "title": "Mais ferramentas para a mesa",
+    "soon": "Em breve",
+    "items": [
+      {
+        "id": "rumor-generator",
+        "name": "Gerador de Rumores",
+        "blurb": "Sussurros pela metade que as facções já acreditam."
+      },
+      {
+        "id": "complication-generator",
+        "name": "Gerador de Complicações",
+        "blurb": "Pressão que complica um plano sem encerrá-lo."
+      },
+      {
+        "id": "quest-generator",
+        "name": "Gerador de Missões",
+        "blurb": "Trabalhos que nascem de escolhas anteriores, não de um mural aleatório."
+      }
+    ]
+  },
+  "about": {
+    "title": "Sobre a PlotRipple",
+    "lead": "A PlotRipple é um portal internacional de ferramentas gratuitas para mestres de RPG de mesa. A primeira ferramenta transforma uma decisão dos jogadores em consequências narrativas estruturadas.",
+    "body": [
+      "O projeto existe para tráfego útil e ofício de mesa, não como um SaaS. Não há conta, banco de campanhas nem assinatura.",
+      "O gerador é independente de sistema. Ele não ensina nem impõe regras de jogos publicados.",
+      "Outras ferramentas seguirão a mesma ideia: auxílios pequenos e focados para usar entre sessões ou à mesa."
+    ]
+  },
+  "privacy": {
+    "title": "Privacidade",
+    "draftNotice": "Esta página é um rascunho inicial. Ela não substitui revisão jurídica.",
+    "sections": [
+      {
+        "title": "O que você escreve",
+        "body": "A descrição enviada é processada por um serviço externo de IA para devolver consequências. Não insira informações pessoais, confidenciais ou sensíveis. Trate o campo como ficção da mesa, não como lugar para nomes reais, contatos ou fatos privados."
+      },
+      {
+        "title": "Histórico local",
+        "body": "As últimas gerações podem ser armazenadas no navegador deste dispositivo para você reabri-las. Esse histórico não é enviado automaticamente."
+      },
+      {
+        "title": "Analytics e anúncios",
+        "body": "Analytics e publicidade poderão ser configurados no futuro. Se forem ativados, não incluirão o texto digitado nem o texto gerado da história."
+      }
+    ]
+  },
+  "terms": {
+    "title": "Termos de uso",
+    "draftNotice": "Esta página é um rascunho inicial. Não é aconselhamento jurídico e não substitui um contrato revisado.",
+    "sections": [
+      {
+        "title": "As ferramentas são rascunhos gratuitos",
+        "body": "A PlotRipple oferece auxílios experimentais e gratuitos para mestres. O texto gerado é um ponto de partida. Você decide o que chega à mesa."
+      },
+      {
+        "title": "Sem contas",
+        "body": "Você pode usar o gerador sem criar conta. Neste MVP não armazenamos campanhas nem perfis de usuário em um servidor."
+      },
+      {
+        "title": "Uso aceitável",
+        "body": "Não use o gerador para criar ou buscar conteúdo ilegal, para enviar dados pessoais de outras pessoas ou para sobrecarregar o serviço."
+      },
+      {
+        "title": "Disponibilidade",
+        "body": "O serviço pode mudar, pausar ou aplicar limites de uso. A saída da IA pode estar errada, irregular ou inadequada para a sua mesa."
+      }
+    ]
+  },
+  "footer": {
+    "rights": "Uma oficina narrativa para mestres.",
+    "independent": "Independente de sistemas de RPG publicados."
+  },
+  "errors": {
+    "VALIDATION_ERROR": "Revise o formulário. Falta algo ou há uma opção inválida.",
+    "BOT_VERIFICATION_FAILED": "A verificação falhou. Atualize a página e tente de novo.",
+    "RATE_LIMITED": "Este dispositivo atingiu o limite atual de gerações. Tente mais tarde.",
+    "AI_UNAVAILABLE": "O gerador está indisponível no momento. Tente de novo em instantes.",
+    "INVALID_AI_RESPONSE": "O gerador devolveu um resultado inutilizável. Tente de novo com uma descrição mais clara.",
+    "INTERNAL_ERROR": "Algo deu errado. Tente novamente em breve.",
+    "network": "Não foi possível alcançar o gerador. Verifique a conexão e tente de novo."
+  }
+}
