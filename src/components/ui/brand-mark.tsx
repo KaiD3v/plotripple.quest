@@ -1,42 +1,40 @@
-export function BrandMark({ className = "h-8 w-8" }: { className?: string }) {
+import Image from "next/image";
+import { BRAND_ASSETS } from "@/lib/brand";
+
+export function BrandMark({
+  className = "h-8 w-8",
+  size = 32,
+  priority = false,
+}: {
+  className?: string;
+  size?: number;
+  priority?: boolean;
+}) {
   return (
-    <svg
-      viewBox="0 0 32 32"
-      className={className}
+    <Image
+      src={BRAND_ASSETS.symbol}
+      alt=""
+      width={size}
+      height={size}
+      className={`brand-sigil ${className}`.trim()}
       aria-hidden="true"
-      focusable="false"
-    >
-      <circle
-        cx="16"
-        cy="16"
-        r="2.4"
-        fill="currentColor"
-      />
-      <circle
-        cx="16"
-        cy="16"
-        r="6.2"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.35"
-      />
-      <circle
-        cx="16"
-        cy="16"
-        r="10.2"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.1"
-        opacity="0.7"
-      />
-      <path
-        d="M27.2 16.4c-.4 5.8-5.4 10.4-11.2 10.4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.1"
-        strokeLinecap="round"
-        opacity="0.4"
-      />
-    </svg>
+      priority={priority}
+    />
+  );
+}
+
+export function BrandLockup({
+  className = "",
+}: {
+  className?: string;
+}) {
+  return (
+    <Image
+      src={BRAND_ASSETS.lockup}
+      alt="PlotRipple"
+      width={200}
+      height={50}
+      className={`h-10 w-auto max-w-[11rem] sm:max-w-[13rem] ${className}`.trim()}
+    />
   );
 }

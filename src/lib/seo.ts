@@ -5,6 +5,7 @@ import {
   localizedPath,
   type Locale,
 } from "@/i18n/config";
+import { BRAND_ASSETS, BRAND_OPEN_GRAPH } from "@/lib/brand";
 import { getSiteUrl } from "@/lib/env";
 
 export function absoluteUrl(locale: Locale, path = ""): string {
@@ -47,11 +48,13 @@ export function buildPageMetadata(options: {
       locale: options.locale === "pt-br" ? "pt_BR" : "en_US",
       alternateLocale: options.locale === "pt-br" ? ["en_US"] : ["pt_BR"],
       siteName: "PlotRipple",
+      images: [BRAND_OPEN_GRAPH],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: options.title,
       description: options.description,
+      images: [BRAND_ASSETS.openGraph],
     },
     robots: {
       index: true,
