@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "plotripple-quest",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-13",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "plotripple-quest"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  // Create a KV namespace, then replace the placeholder and uncomment:
+  // npx wrangler kv namespace create RATE_LIMIT_KV
+  // "kv_namespaces": [
+  //   {
+  //     "binding": "RATE_LIMIT_KV",
+  //     "id": "REPLACE_WITH_RATE_LIMIT_KV_ID"
+  //   }
+  // ]
+}
