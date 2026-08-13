@@ -52,4 +52,25 @@ describe("GeneratorForm", () => {
     expect(html).toContain('aria-busy="true"');
     expect(html).toContain("aria-live");
   });
+
+  it("keeps semantic radios and a non-color selected state", () => {
+    const dictionary = getDictionary("en");
+    const html = renderToStaticMarkup(
+      <GeneratorForm
+        dictionary={dictionary}
+        values={values}
+        errors={{}}
+        pending={false}
+        onChange={() => undefined}
+        onTurnstileToken={() => undefined}
+        onSubmit={() => undefined}
+      />,
+    );
+
+    expect(html).toContain('type="radio"');
+    expect(html).toContain('name="tone"');
+    expect(html).toContain("narrative-plate");
+    expect(html).toContain("is-selected");
+    expect(html).toContain("workshop-blotter");
+  });
 });

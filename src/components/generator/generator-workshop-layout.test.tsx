@@ -17,5 +17,11 @@ describe("GeneratorWorkshopLayout", () => {
     expect(html).toContain("order-1");
     expect(html).toContain("order-2");
     expect(html).toContain("order-3");
+    expect(html).toContain("workshop-bench");
+    expect(html).toContain("lg:grid-cols-[minmax(0,11fr)_minmax(0,14fr)]");
+    expect(html).toContain("lg:sticky");
+    expect(html).toContain("lg:items-start");
   });
 });
+
+

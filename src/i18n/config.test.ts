@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   htmlLangFromPathname,
+  localeBadges,
   localeHtmlLang,
   swapLocalePath,
 } from "@/i18n/config";
@@ -18,5 +19,12 @@ describe("language switching", () => {
   it("swaps the locale segment without losing the rest of the path", () => {
     expect(swapLocalePath("/en/privacy", "pt-br")).toBe("/pt-br/privacy");
     expect(swapLocalePath("/pt-br", "en")).toBe("/en");
+  });
+});
+
+describe("locale badges", () => {
+  it("uses compact EN and PT-BR marks for history", () => {
+    expect(localeBadges.en).toBe("EN");
+    expect(localeBadges["pt-br"]).toBe("PT-BR");
   });
 });

@@ -46,6 +46,7 @@ export function GeneratorWorkshop({
   const [values, setValues] = useState({ ...defaultValues, locale });
   const [turnstileToken, setTurnstileToken] = useState("");
   const [result, setResult] = useState<GenerationResult | null>(null);
+  const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
   const history = useSyncExternalStore(
     subscribeHistory,
     getHistorySnapshot,
@@ -55,10 +56,18 @@ export function GeneratorWorkshop({
   const [formError, setFormError] = useState<string | undefined>();
   const [requestError, setRequestError] = useState<string | undefined>();
   const resultRef = useRef<HTMLDivElement>(null);
+  const [resultFocusToken, setResultFocusToken] = useState(0);
 
   useEffect(() => {
     trackEvent("generator_view", { locale });
   }, [locale]);
+
+  useEffect(() => {
+    if (resultFocusToken === 0) {
+      return;
+    }
+    bringResultIntoView(resultRef.current);
+  }, [resultFocusToken]);
 
   function categoricalParams(extra?: {
     error_code?: string;
@@ -156,12 +165,13 @@ export function GeneratorWorkshop({
 
       setResult(payload);
       const entry = createHistoryEntry({ ...values, locale }, payload);
+      setActiveHistoryId(entry.id);
       saveHistory(prependHistoryEntry(history, entry));
       trackEvent(
         "generator_success",
         categoricalParams({ duration_bucket: bucket }),
       );
-      bringResultIntoView(resultRef.current);
+      setResultFocusToken((token) => token + 1);
     } catch {
       setRequestError(dictionary.errors.network);
       trackEvent(
@@ -191,7 +201,7 @@ export function GeneratorWorkshop({
             onSubmit={() => void generate()}
           />
           {requestError ? (
-            <p className="mt-3 text-sm text-danger" role="alert">
+            <p className="workshop-alert mt-3 px-3 py-2 text-sm" role="alert">
               {requestError}
             </p>
           ) : null}
@@ -210,6 +220,7 @@ export function GeneratorWorkshop({
         <GenerationHistory
           entries={history}
           dictionary={dictionary}
+          activeId={activeHistoryId}
           onOpen={(entry) => {
             trackEvent("history_opened", {
               locale,
@@ -221,9 +232,12 @@ export function GeneratorWorkshop({
             });
             setValues({ ...entry.input, locale: entry.input.locale ?? locale });
             setResult(entry.result);
+            setActiveHistoryId(entry.id);
+            setResultFocusToken((token) => token + 1);
           }}
           onClear={() => {
             saveHistory([]);
+            setActiveHistoryId(null);
           }}
         />
       }

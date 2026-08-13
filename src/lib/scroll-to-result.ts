@@ -1,8 +1,12 @@
+export const RESULT_SCROLL_OFFSET_PX = 72;
+
 export function shouldScrollToResult(
   rect: { top: number; bottom: number },
   viewportHeight: number,
+  headerOffset = RESULT_SCROLL_OFFSET_PX,
 ): boolean {
-  return rect.top < 0 || rect.top > viewportHeight;
+  const topIsVisible = rect.top >= headerOffset && rect.top < viewportHeight;
+  return !topIsVisible;
 }
 
 export function prefersReducedMotion(
@@ -12,7 +16,7 @@ export function prefersReducedMotion(
 }
 
 export function bringResultIntoView(element: HTMLElement | null): void {
-  if (!element) {
+  if (!element || typeof window === "undefined") {
     return;
   }
 

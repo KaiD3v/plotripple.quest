@@ -11,7 +11,9 @@ describe("ComingSoonTools", () => {
     expect(html).toContain("Coming soon");
     expect(html).toContain("Rumor Generator");
     expect(html).not.toContain("<button");
+    expect(html).not.toContain("<a ");
     expect(html).toContain("<article");
+    expect(html).toContain("unwritten-page");
   });
 
   it("keeps localized Portuguese labels", () => {

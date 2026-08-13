@@ -1,6 +1,5 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import {
   EVENT_DESCRIPTION_MAX,
@@ -19,6 +18,8 @@ import {
   type Timeframe,
   type Tone,
 } from "@/types/generator";
+import { NarrativeOption } from "@/components/generator/narrative-option";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { TurnstileWidget } from "@/components/ui/turnstile-widget";
 
 type FormErrors = {
@@ -51,7 +52,7 @@ export function GeneratorForm({
 
   return (
     <form
-      className="rounded-sm border border-moss/40 bg-canopy/60 p-4 sm:p-5"
+      className="workshop-blotter p-4 sm:p-5"
       aria-busy={pending || undefined}
       onSubmit={(event) => {
         event.preventDefault();
@@ -59,18 +60,18 @@ export function GeneratorForm({
       }}
       noValidate
     >
-      <h2 className="font-display text-2xl text-gold">
+      <SectionHeading index="I" stepLabel={dictionary.workshop.stepRecord}>
         {dictionary.generator.title}
-      </h2>
+      </SectionHeading>
 
       <div className="mt-5">
         <label
           htmlFor="event-description"
-          className="block text-sm font-medium text-mist"
+          className="block text-sm font-medium text-bone"
         >
           {dictionary.generator.eventLabel}
         </label>
-        <p id="event-hint" className="mt-1 text-sm text-mist-dim">
+        <p id="event-hint" className="mt-1 text-sm text-lichen">
           {dictionary.generator.eventHint}
         </p>
         <textarea
@@ -87,18 +88,18 @@ export function GeneratorForm({
               : "event-hint event-count"
           }
           aria-invalid={errors.eventDescription ? true : undefined}
-          className="mt-2 w-full resize-y rounded-sm border border-moss/50 bg-void px-3 py-3 text-base text-mist"
+          className="ink-field mt-2 w-full resize-y px-3 py-3 text-base"
           placeholder={dictionary.generator.eventPlaceholder}
           onChange={(event) =>
             onChange({ ...values, eventDescription: event.target.value })
           }
         />
         <div className="mt-1 flex items-start justify-between gap-3">
-          <p id="event-count" className="text-xs text-mist-dim">
+          <p id="event-count" className="text-xs text-sage">
             {countLabel}
           </p>
           {errors.eventDescription ? (
-            <p id="event-error" className="text-sm text-danger" role="alert">
+            <p id="event-error" className="text-sm text-oxblood" role="alert">
               {errors.eventDescription}
             </p>
           ) : null}
@@ -109,6 +110,7 @@ export function GeneratorForm({
         legend={dictionary.generator.toneLabel}
         name="tone"
         value={values.tone}
+        disabled={pending}
         options={tones.map((tone) => ({
           value: tone,
           label: dictionary.generator.tones[tone],
@@ -120,6 +122,7 @@ export function GeneratorForm({
         legend={dictionary.generator.intensityLabel}
         name="intensity"
         value={values.intensity}
+        disabled={pending}
         options={intensities.map((intensity) => ({
           value: intensity,
           label: dictionary.generator.intensities[intensity],
@@ -133,6 +136,7 @@ export function GeneratorForm({
         legend={dictionary.generator.settingLabel}
         name="setting"
         value={values.setting}
+        disabled={pending}
         options={settings.map((setting) => ({
           value: setting,
           label: dictionary.generator.settings[setting],
@@ -147,6 +151,7 @@ export function GeneratorForm({
         hint={dictionary.generator.timeframeHint}
         name="timeframe"
         value={values.timeframe}
+        disabled={pending}
         options={timeframes.map((timeframe) => ({
           value: timeframe,
           label: dictionary.generator.timeframes[timeframe],
@@ -160,6 +165,7 @@ export function GeneratorForm({
         legend={dictionary.generator.countLabel}
         name="count"
         value={String(values.count)}
+        disabled={pending}
         options={resultCounts.map((countOption) => ({
           value: String(countOption),
           label: dictionary.generator.counts[String(countOption) as "3" | "5"],
@@ -185,16 +191,16 @@ export function GeneratorForm({
       <button
         type="submit"
         disabled={pending}
-        className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm bg-gold px-4 text-base font-medium text-void hover:bg-gold/90 disabled:cursor-not-allowed disabled:opacity-70"
+        className={`generate-btn mt-6${pending ? " is-busy" : ""}`}
       >
-        {pending ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+        <span className="generate-label">
+          <span className={pending ? "invisible" : undefined} aria-hidden={pending || undefined}>
+            {dictionary.generator.submit}
+          </span>
+          <span className={pending ? undefined : "invisible"} aria-hidden={pending ? undefined : true}>
             {dictionary.generator.generating}
-          </>
-        ) : (
-          dictionary.generator.submit
-        )}
+          </span>
+        </span>
       </button>
     </form>
   );
@@ -206,6 +212,7 @@ function OptionGroup({
   name,
   value,
   options,
+  disabled,
   onChange,
 }: {
   legend: string;
@@ -213,39 +220,26 @@ function OptionGroup({
   name: string;
   value: string;
   options: Array<{ value: string; label: string }>;
+  disabled?: boolean;
   onChange: (value: string) => void;
 }) {
   return (
-    <fieldset className="mt-5">
-      <legend className="text-sm font-medium text-mist">{legend}</legend>
-      {hint ? <p className="mt-1 text-sm text-mist-dim">{hint}</p> : null}
+    <fieldset className="mt-5" disabled={disabled}>
+      <legend className="text-sm font-medium text-bone">{legend}</legend>
+      {hint ? <p className="mt-1 text-sm text-lichen">{hint}</p> : null}
       <div className="mt-2 flex flex-wrap gap-2">
-        {options.map((option) => {
-          const id = `${name}-${option.value}`;
-          const checked = option.value === value;
-          return (
-            <label
-              key={option.value}
-              htmlFor={id}
-              className={`inline-flex min-h-11 cursor-pointer items-center rounded-sm border px-3 text-sm ${
-                checked
-                  ? "border-gold bg-gold/15 text-gold"
-                  : "border-moss/50 text-mist-dim hover:border-gold-dim hover:text-mist"
-              }`}
-            >
-              <input
-                id={id}
-                type="radio"
-                name={name}
-                value={option.value}
-                checked={checked}
-                className="sr-only"
-                onChange={() => onChange(option.value)}
-              />
-              {option.label}
-            </label>
-          );
-        })}
+        {options.map((option) => (
+          <NarrativeOption
+            key={option.value}
+            id={`${name}-${option.value}`}
+            name={name}
+            value={option.value}
+            label={option.label}
+            checked={option.value === value}
+            disabled={disabled}
+            onChange={onChange}
+          />
+        ))}
       </div>
     </fieldset>
   );

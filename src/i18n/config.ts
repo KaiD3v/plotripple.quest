@@ -19,6 +19,11 @@ export const localeLabels: Record<Locale, string> = {
   "pt-br": "Português",
 };
 
+export const localeBadges: Record<Locale, string> = {
+  en: "EN",
+  "pt-br": "PT-BR",
+};
+
 export function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
 }

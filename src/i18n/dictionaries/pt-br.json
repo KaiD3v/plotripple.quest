@@ -27,6 +27,10 @@
     "eyebrow": "Oficina narrativa",
     "helper": "Descreva uma decisão. Escolha tom e escala. Receba consequências para a próxima cena — ou para a próxima temporada."
   },
+  "workshop": {
+    "stepRecord": "Etapa 1: Registre a decisão",
+    "stepReview": "Etapa 2: Analise as consequências"
+  },
   "ads": {
     "label": "Publicidade"
   },
@@ -81,7 +85,7 @@
   },
   "result": {
     "title": "Consequências",
-    "empty": "Os resultados aparecem aqui depois da geração. O formulário permanece visível para você ajustar a decisão.",
+    "empty": "A página ainda está em branco. Registre uma escolha para revelar suas repercussões.",
     "summaryLabel": "Situação",
     "copy": "Copiar tudo",
     "copied": "Copiado",

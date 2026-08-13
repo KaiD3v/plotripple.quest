@@ -27,6 +27,10 @@
     "eyebrow": "Narrative workshop",
     "helper": "Describe a decision. Choose tone and scale. Receive consequences you can drop into the next scene — or the next season."
   },
+  "workshop": {
+    "stepRecord": "Step 1: Record the decision",
+    "stepReview": "Step 2: Review the consequences"
+  },
   "ads": {
     "label": "Advertisement"
   },
@@ -81,7 +85,7 @@
   },
   "result": {
     "title": "Consequences",
-    "empty": "Results appear here after you generate. The form stays on the left so you can refine the decision.",
+    "empty": "The page is still blank. Record a choice to reveal its ripples.",
     "summaryLabel": "Situation",
     "copy": "Copy all",
     "copied": "Copied",
