@@ -41,24 +41,24 @@ export function Header({
   }, [open]);
 
   return (
-    <header className="border-b border-moss/40 bg-void/80 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <header className="border-b border-forest/60 bg-deep pt-[max(0.5rem,env(safe-area-inset-top))]">
+      <div className="page-gutter mx-auto flex max-w-7xl items-center justify-between gap-4 py-2.5">
         <Link
           href={localizedPath(locale)}
-          className="flex min-h-11 min-w-0 items-center gap-2 text-gold"
+          className="flex min-h-11 min-w-0 items-center gap-2.5 text-gold"
         >
-          <BrandMark className="h-7 w-7 shrink-0" />
-          <span className="font-display text-lg tracking-wide">
+          <BrandMark className="h-8 w-8 shrink-0" size={32} priority />
+          <span className="font-display text-lg tracking-wide text-bone">
             {dictionary.brand.name}
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-5 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-5 lg:flex" aria-label="Primary">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="inline-flex min-h-11 items-center text-sm text-mist-dim hover:text-mist"
+              className="inline-flex min-h-11 items-center text-sm text-lichen hover:text-bone"
             >
               {link.label}
             </Link>
@@ -69,7 +69,7 @@ export function Header({
         <button
           ref={menuButtonRef}
           type="button"
-          className="inline-flex min-h-11 min-w-11 items-center justify-center text-mist md:hidden"
+          className="inline-flex min-h-11 min-w-11 items-center justify-center text-bone lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           onClick={() => setOpen((value) => !value)}
@@ -84,13 +84,13 @@ export function Header({
       {open ? (
         <nav
           id="mobile-nav"
-          className="space-y-1 border-t border-moss/40 px-4 py-3 md:hidden"
+          className="mobile-nav-panel page-gutter space-y-1 border-t border-forest/60 py-3 lg:hidden"
         >
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="flex min-h-11 items-center text-mist"
+              className="flex min-h-11 items-center text-bone"
               onClick={() => setOpen(false)}
             >
               {link.label}

@@ -1,4 +1,5 @@
 import type { Dictionary } from "@/i18n/get-dictionary";
+import { OrnamentDivider } from "@/components/ui/ornament-divider";
 
 export function InstitutionalPage({
   content,
@@ -16,25 +17,26 @@ export function InstitutionalPage({
     draftNotice ?? ("draftNotice" in content ? content.draftNotice : undefined);
 
   return (
-    <article className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="font-display text-4xl text-mist">{content.title}</h1>
+    <article className="page-gutter mx-auto w-full max-w-3xl py-10">
+      <h1 className="break-words font-display text-4xl text-bone">{content.title}</h1>
+      <OrnamentDivider className="mt-5 max-w-xs" />
       {"lead" in content ? (
-        <p className="mt-4 text-lg text-mist-dim">{content.lead}</p>
+        <p className="mt-5 text-lg text-lichen">{content.lead}</p>
       ) : null}
       {notice ? (
-        <p className="mt-4 rounded-sm border border-gold-dim/40 bg-canopy/40 px-3 py-2 text-sm text-gold">
+        <p className="mt-4 border border-bronze/45 bg-elevated/70 px-3 py-2 text-sm text-gold">
           {notice}
         </p>
       ) : null}
       {body?.map((paragraph) => (
-        <p key={paragraph} className="mt-5 leading-relaxed text-mist-dim">
+        <p key={paragraph} className="mt-5 leading-relaxed text-lichen">
           {paragraph}
         </p>
       ))}
       {extraSections?.map((section) => (
         <section key={section.title} className="mt-8">
-          <h2 className="font-display text-2xl text-gold">{section.title}</h2>
-          <p className="mt-3 leading-relaxed text-mist-dim">{section.body}</p>
+          <h2 className="font-display text-2xl text-bone">{section.title}</h2>
+          <p className="mt-3 leading-relaxed text-lichen">{section.body}</p>
         </section>
       ))}
     </article>

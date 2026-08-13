@@ -15,7 +15,7 @@ export function LanguageSwitcher({
   const pathname = usePathname() || `/${locale}`;
 
   return (
-    <nav aria-label={label} className="flex items-center gap-1">
+    <nav aria-label={label} className="lang-switch">
       {locales.map((item) => {
         const active = item === locale;
         return (
@@ -24,10 +24,8 @@ export function LanguageSwitcher({
             href={swapLocalePath(pathname, item)}
             hrefLang={item === "pt-br" ? "pt-BR" : "en"}
             lang={item === "pt-br" ? "pt-BR" : "en"}
-            className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm px-2 text-sm tracking-wide ${
-              active
-                ? "text-gold"
-                : "text-mist-dim hover:text-mist"
+            className={`inline-flex min-h-11 min-w-11 items-center justify-center px-3 text-sm tracking-wide ${
+              active ? "text-bone" : "text-lichen hover:text-bone"
             }`}
             aria-current={active ? "page" : undefined}
             onClick={() => {
