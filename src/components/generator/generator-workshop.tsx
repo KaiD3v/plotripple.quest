@@ -1,16 +1,31 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import { prepareChronicleNavigation } from "@/lib/chronicle/prepare-navigation";
+import { hydrateLegacyHistoryIntoLibrary } from "@/lib/chronicle/migrate-history-entry";
+import { openChronicleOnCanvas } from "@/lib/chronicle/open-chronicle";
+import {
+  CHRONICLE_LIBRARY_MAX_ITEMS,
+} from "@/lib/chronicle/limits";
+import {
+  clearPlotRippleLocalStorage,
+  deleteStoredChronicle,
+  getBrowserLibraryStorage,
+} from "@/lib/chronicle/library-repository";
+import {
+  getRecentDeviceSnapshot,
+  getServerRecentDeviceSnapshot,
+  subscribeRecentDevice,
+  type RecentDeviceItem,
+} from "@/lib/chronicle/recent-device";
 import { durationBucket, trackEvent } from "@/lib/analytics";
 import {
-  createHistoryEntry,
-  getHistorySnapshot,
-  getServerHistorySnapshot,
-  prependHistoryEntry,
+  getBrowserHistoryStorage,
+  readHistory,
   saveHistory,
-  subscribeHistory,
 } from "@/lib/local-history";
 import { bringResultIntoView } from "@/lib/scroll-to-result";
 import {
@@ -47,20 +62,27 @@ export function GeneratorWorkshop({
   const [turnstileToken, setTurnstileToken] = useState("");
   const [result, setResult] = useState<GenerationResult | null>(null);
   const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
-  const history = useSyncExternalStore(
-    subscribeHistory,
-    getHistorySnapshot,
-    getServerHistorySnapshot,
+  const recents = useSyncExternalStore(
+    subscribeRecentDevice,
+    getRecentDeviceSnapshot,
+    getServerRecentDeviceSnapshot,
   );
   const [pending, setPending] = useState(false);
   const [formError, setFormError] = useState<string | undefined>();
   const [requestError, setRequestError] = useState<string | undefined>();
   const resultRef = useRef<HTMLDivElement>(null);
   const [resultFocusToken, setResultFocusToken] = useState(0);
+  const router = useRouter();
+  const libraryCount = recents.filter((item) => item.kind === "chronicle" && item.persisted).length;
+  const libraryFull = libraryCount >= CHRONICLE_LIBRARY_MAX_ITEMS;
 
   useEffect(() => {
     trackEvent("generator_view", { locale });
   }, [locale]);
+
+  useEffect(() => {
+    hydrateLegacyHistoryIntoLibrary(getBrowserLibraryStorage());
+  }, []);
 
   useEffect(() => {
     if (resultFocusToken === 0) {
@@ -164,12 +186,30 @@ export function GeneratorWorkshop({
       }
 
       setResult(payload);
-      const entry = createHistoryEntry({ ...values, locale }, payload);
-      setActiveHistoryId(entry.id);
-      saveHistory(prependHistoryEntry(history, entry));
       trackEvent(
         "generator_success",
         categoricalParams({ duration_bucket: bucket }),
+      );
+      const navigation = prepareChronicleNavigation(
+        payload,
+        locale,
+        values.eventDescription,
+        undefined,
+        {
+          tone: values.tone,
+          intensity: values.intensity,
+          setting: values.setting,
+          locale,
+        },
+      );
+      if (navigation.ok) {
+        setActiveHistoryId(navigation.graph.id ?? null);
+        router.push(navigation.href);
+        return;
+      }
+      setRequestError(
+        dictionary.errors[navigation.code as keyof typeof dictionary.errors] ??
+          dictionary.errors.INTERNAL_ERROR,
       );
       setResultFocusToken((token) => token + 1);
     } catch {
@@ -183,6 +223,43 @@ export function GeneratorWorkshop({
       );
     } finally {
       setPending(false);
+    }
+  }
+
+  function openMap(item: Extract<RecentDeviceItem, { kind: "chronicle" }>) {
+    trackEvent("history_opened", {
+      locale,
+      result_count: item.nodeCount,
+    });
+    const opened = openChronicleOnCanvas({
+      id: item.id,
+      locale,
+      sourceHistoryId: item.sourceHistoryId,
+    });
+    if (!opened.ok) {
+      setRequestError(
+        dictionary.errors[opened.code as keyof typeof dictionary.errors] ??
+          dictionary.errors.INTERNAL_ERROR,
+      );
+      return;
+    }
+    setActiveHistoryId(item.id);
+    router.push(opened.href);
+  }
+
+  function deleteItem(item: RecentDeviceItem) {
+    if (item.kind === "chronicle" && item.persisted) {
+      deleteStoredChronicle(item.id);
+      return;
+    }
+    if (item.kind === "chronicle" && item.sourceHistoryId) {
+      const history = readHistory(getBrowserHistoryStorage());
+      saveHistory(history.filter((entry) => entry.id !== item.sourceHistoryId));
+      return;
+    }
+    if (item.kind === "legacy") {
+      const history = readHistory(getBrowserHistoryStorage());
+      saveHistory(history.filter((entry) => entry.id !== item.id));
     }
   }
 
@@ -218,10 +295,13 @@ export function GeneratorWorkshop({
       }
       history={
         <GenerationHistory
-          entries={history}
+          items={recents}
+          locale={locale}
           dictionary={dictionary}
           activeId={activeHistoryId}
-          onOpen={(entry) => {
+          libraryFull={libraryFull}
+          onOpenMap={openMap}
+          onReviewLegacy={(entry) => {
             trackEvent("history_opened", {
               locale,
               tone: entry.input.tone,
@@ -235,8 +315,9 @@ export function GeneratorWorkshop({
             setActiveHistoryId(entry.id);
             setResultFocusToken((token) => token + 1);
           }}
+          onDelete={deleteItem}
           onClear={() => {
-            saveHistory([]);
+            clearPlotRippleLocalStorage();
             setActiveHistoryId(null);
           }}
         />

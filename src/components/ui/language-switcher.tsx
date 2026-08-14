@@ -1,16 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { localeLabels, locales, swapLocalePath, type Locale } from "@/i18n/config";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { localeLabels, locales, swapLocaleHref, type Locale } from "@/i18n/config";
 import { trackEvent } from "@/lib/analytics";
 
 export function LanguageSwitcher({
   locale,
   label,
+  search = "",
 }: {
   locale: Locale;
   label: string;
+  search?: string;
 }) {
   const pathname = usePathname() || `/${locale}`;
 
@@ -21,7 +24,7 @@ export function LanguageSwitcher({
         return (
           <Link
             key={item}
-            href={swapLocalePath(pathname, item)}
+            href={swapLocaleHref(pathname, item, search)}
             hrefLang={item === "pt-br" ? "pt-BR" : "en"}
             lang={item === "pt-br" ? "pt-BR" : "en"}
             className={`inline-flex min-h-11 min-w-11 items-center justify-center px-3 text-sm tracking-wide ${
@@ -40,5 +43,36 @@ export function LanguageSwitcher({
         );
       })}
     </nav>
+  );
+}
+
+function LanguageSwitcherWithSearch({
+  locale,
+  label,
+}: {
+  locale: Locale;
+  label: string;
+}) {
+  const searchParams = useSearchParams();
+  return (
+    <LanguageSwitcher
+      locale={locale}
+      label={label}
+      search={searchParams.toString()}
+    />
+  );
+}
+
+export function LanguageSwitcherNav({
+  locale,
+  label,
+}: {
+  locale: Locale;
+  label: string;
+}) {
+  return (
+    <Suspense fallback={<LanguageSwitcher locale={locale} label={label} />}>
+      <LanguageSwitcherWithSearch locale={locale} label={label} />
+    </Suspense>
   );
 }

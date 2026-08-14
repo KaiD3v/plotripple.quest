@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { localizedPath, type Locale } from "@/i18n/config";
 import { BrandMark } from "@/components/ui/brand-mark";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { LanguageSwitcherNav } from "@/components/ui/language-switcher";
 
 export function Header({
   locale,
@@ -63,7 +63,7 @@ export function Header({
               {link.label}
             </Link>
           ))}
-          <LanguageSwitcher locale={locale} label={dictionary.nav.language} />
+          <LanguageSwitcherNav locale={locale} label={dictionary.nav.language} />
         </nav>
 
         <button
@@ -96,7 +96,7 @@ export function Header({
               {link.label}
             </Link>
           ))}
-          <LanguageSwitcher locale={locale} label={dictionary.nav.language} />
+          <LanguageSwitcherNav locale={locale} label={dictionary.nav.language} />
         </nav>
       ) : null}
     </header>
