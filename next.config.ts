@@ -47,15 +47,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
-if (process.env.NODE_ENV === "development") {
-  void import("@opennextjs/cloudflare")
-    .then(({ initOpenNextCloudflareForDev }) => {
-      initOpenNextCloudflareForDev();
-    })
-    .catch(() => {
-      console.warn(
-        "Cloudflare bindings are unavailable in this next dev session.",
-      );
-    });
-}
