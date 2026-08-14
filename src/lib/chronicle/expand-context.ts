@@ -4,8 +4,15 @@ import {
   chroniclePathTo,
   chronicleRoot,
 } from "@/lib/chronicle/graph-helpers";
+import {
+  EXPAND_EXISTING_TITLE_MAX,
+  EXPAND_EXISTING_TITLES_MAX,
+} from "@/lib/chronicle/limits";
 import type { Locale } from "@/i18n/config";
-import type { ExpandRippleRequestParsed } from "@/schemas/follow-up";
+import {
+  expandRippleRequestSchema,
+  type ExpandRippleRequestParsed,
+} from "@/schemas/follow-up";
 import type { ChronicleErrorCode, ChronicleGraph } from "@/types/chronicle";
 
 function clip(value: string, max: number): string {
@@ -16,9 +23,16 @@ function clip(value: string, max: number): string {
   return `${trimmed.slice(0, Math.max(0, max - 1)).trimEnd()}…`;
 }
 
+export function normalizeExpandExistingTitles(titles: string[]): string[] {
+  return titles
+    .map((title) => clip(title, EXPAND_EXISTING_TITLE_MAX))
+    .filter((title, index, all) => all.indexOf(title) === index)
+    .slice(0, EXPAND_EXISTING_TITLES_MAX);
+}
+
 export type ExpandRippleRequestBuild =
   | { ok: true; request: ExpandRippleRequestParsed }
-  | { ok: false; code: ChronicleErrorCode };
+  | { ok: false; code: ChronicleErrorCode | "VALIDATION_ERROR" };
 
 export function buildExpandRippleRequest(
   graph: ChronicleGraph,
@@ -40,34 +54,47 @@ export function buildExpandRippleRequest(
   const siblingTitles = selected.parentId
     ? chronicleChildren(graph, selected.parentId).map((node) => node.title)
     : [];
-  const existingTitles = [
+  const existingTitles = normalizeExpandExistingTitles([
     ...path.map((node) => node.title),
     ...siblingTitles,
-  ].filter((title, index, all) => all.indexOf(title) === index);
+  ]);
+
+  const candidate = {
+    locale: graph.context?.locale ?? locale,
+    tone: graph.context?.tone,
+    intensity: graph.context?.intensity,
+    setting: graph.context?.setting,
+    chronicleTitle: graph.title,
+    originTitle: root.title,
+    originDescription: root.description || undefined,
+    selected: {
+      title: selected.title,
+      description: selected.description,
+      timeframe: selected.timeframe,
+      category: selected.category,
+      trigger: selected.trigger,
+      affectedParties: selected.affectedParties,
+    },
+    path: path.map((node) => ({
+      title: node.title,
+      excerpt: node.description ? clip(node.description, 400) : undefined,
+    })),
+    existingTitles,
+  };
+
+  const parsed = expandRippleRequestSchema.safeParse(candidate);
+  if (!parsed.success) {
+    console.error("expand_request_invalid", {
+      issues: parsed.error.issues.map((issue) => ({
+        path: issue.path.join("."),
+        code: issue.code,
+      })),
+    });
+    return { ok: false, code: "VALIDATION_ERROR" };
+  }
 
   return {
     ok: true,
-    request: {
-      locale: graph.context?.locale ?? locale,
-      tone: graph.context?.tone,
-      intensity: graph.context?.intensity,
-      setting: graph.context?.setting,
-      chronicleTitle: graph.title,
-      originTitle: root.title,
-      originDescription: root.description || undefined,
-      selected: {
-        title: selected.title,
-        description: selected.description,
-        timeframe: selected.timeframe,
-        category: selected.category,
-        trigger: selected.trigger,
-        affectedParties: selected.affectedParties,
-      },
-      path: path.map((node) => ({
-        title: node.title,
-        excerpt: node.description ? clip(node.description, 400) : undefined,
-      })),
-      existingTitles: existingTitles.slice(0, 24),
-    },
+    request: parsed.data,
   };
 }
