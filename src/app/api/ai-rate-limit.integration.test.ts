@@ -8,10 +8,6 @@ vi.mock("@/lib/gemini/generate-follow-ups", () => ({
   generateFollowUps: vi.fn(),
 }));
 
-vi.mock("@/lib/turnstile", () => ({
-  verifyTurnstileIfConfigured: vi.fn(async () => undefined),
-}));
-
 import { POST as postExpand } from "@/app/api/expand/route";
 import { POST as postGenerate } from "@/app/api/generate/route";
 import { generateConsequences } from "@/lib/gemini/generate-consequences";

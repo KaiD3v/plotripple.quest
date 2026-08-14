@@ -4,15 +4,13 @@ vi.mock("@/lib/gemini/generate-consequences", () => ({
   generateConsequences: vi.fn(),
 }));
 
-vi.mock("@/lib/turnstile", () => ({
-  verifyTurnstileIfConfigured: vi.fn(async () => undefined),
-}));
-
 vi.mock("@/lib/rate-limit", () => ({
   enforceRateLimit: vi.fn(async () => undefined),
 }));
 
+import { AppError } from "@/lib/errors";
 import { generateConsequences } from "@/lib/gemini/generate-consequences";
+import { enforceRateLimit } from "@/lib/rate-limit";
 import { POST } from "@/app/api/generate/route";
 
 const validPayload = {
@@ -67,14 +65,33 @@ function requestWith(body: unknown, extra?: RequestInit) {
 describe("POST /api/generate", () => {
   beforeEach(() => {
     vi.mocked(generateConsequences).mockReset();
+    vi.mocked(enforceRateLimit).mockReset();
     vi.mocked(generateConsequences).mockResolvedValue(validResult);
+    vi.mocked(enforceRateLimit).mockResolvedValue(undefined);
   });
 
-  it("accepts a valid payload", async () => {
+  it("accepts a valid payload without a captcha token field", async () => {
     const response = await POST(requestWith(validPayload));
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual(validResult);
+    expect(enforceRateLimit).toHaveBeenCalledTimes(1);
     expect(generateConsequences).toHaveBeenCalledTimes(1);
+    const captchaTokenField = ["turn", "stile", "Token"].join("");
+    expect(generateConsequences).toHaveBeenCalledWith(
+      expect.not.objectContaining({ [captchaTokenField]: expect.anything() }),
+    );
+  });
+
+  it("does not call Gemini when rate limiting blocks the request", async () => {
+    vi.mocked(enforceRateLimit).mockRejectedValue(
+      new AppError("RATE_LIMITED", 429),
+    );
+    const response = await POST(requestWith(validPayload));
+    expect(response.status).toBe(429);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { code: "RATE_LIMITED" },
+    });
+    expect(generateConsequences).not.toHaveBeenCalled();
   });
 
   it("rejects a description shorter than 20 characters", async () => {
@@ -85,6 +102,7 @@ describe("POST /api/generate", () => {
     await expect(response.json()).resolves.toMatchObject({
       error: { code: "VALIDATION_ERROR" },
     });
+    expect(enforceRateLimit).not.toHaveBeenCalled();
     expect(generateConsequences).not.toHaveBeenCalled();
   });
 
