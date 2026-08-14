@@ -233,6 +233,33 @@ h3,
   grid-area: 1 / 1;
 }
 
+.preset-summary {
+  color: var(--lichen);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.preset-summary-label {
+  color: var(--sage);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.preset-toggle {
+  color: var(--gold);
+  background: transparent;
+  text-decoration: underline;
+  text-decoration-color: rgb(196 160 90 / 0.42);
+  text-underline-offset: 0.28em;
+}
+
+.preset-toggle:hover:not(:disabled) {
+  color: var(--gold-bright);
+  text-decoration-color: currentColor;
+}
+
 .folio {
   background:
     linear-gradient(90deg, rgb(91 70 38 / 0.14), transparent 1.4rem),
@@ -272,6 +299,125 @@ h3,
   align-items: center;
   justify-content: center;
   padding-top: 0.5rem;
+}
+
+.folio-example-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 0.85rem;
+}
+
+.example-folio {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: 0.85rem;
+}
+
+.example-folio-kicker {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px dashed rgb(91 70 38 / 0.38);
+  color: var(--bronze);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  padding: 0.28rem 0.55rem;
+  text-transform: uppercase;
+}
+
+.example-folio-caption {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bronze);
+}
+
+.example-folio-quote,
+.example-folio-summary {
+  max-width: 38rem;
+  font-family: var(--font-reading);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.example-folio-quote {
+  color: rgb(44 37 28 / 0.82);
+}
+
+.example-ripple-list {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0.85rem 0 0.15rem 1.65rem;
+  list-style: none;
+  border-top: 1px dashed rgb(91 70 38 / 0.28);
+}
+
+.example-ripple-list::before {
+  content: "";
+  position: absolute;
+  top: 1.2rem;
+  bottom: 0.45rem;
+  left: 0.5rem;
+  width: 1px;
+  background: linear-gradient(180deg, var(--bronze), rgb(110 85 51 / 0.22));
+}
+
+.example-ripple-item {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  gap: 0.22rem;
+}
+
+.example-ripple-item .timeframe-mark {
+  position: absolute;
+  top: 0.08rem;
+  left: -1.65rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--bronze);
+}
+
+.example-ripple-timeframe {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bronze);
+}
+
+.example-ripple-title {
+  max-width: 38rem;
+  font-family: var(--font-reading);
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: var(--parchment-ink);
+}
+
+.example-use-btn {
+  border: 1px solid rgb(91 70 38 / 0.42);
+  background: rgb(244 235 210 / 0.7);
+  color: var(--parchment-ink);
+}
+
+.example-use-btn:hover {
+  border-color: var(--bronze);
+  background: rgb(244 235 210 / 0.95);
+}
+
+.decision-field {
+  scroll-margin-top: calc(4.5rem + env(safe-area-inset-top, 0px));
 }
 
 .folio-placeholder {

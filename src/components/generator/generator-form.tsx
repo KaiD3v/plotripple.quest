@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import { trackEvent } from "@/lib/analytics";
 import {
   EVENT_DESCRIPTION_MAX,
   EVENT_DESCRIPTION_MIN,
@@ -19,6 +21,11 @@ import {
   type Tone,
 } from "@/types/generator";
 import { NarrativeOption } from "@/components/generator/narrative-option";
+import {
+  ADVANCED_OPTIONS_ID,
+  PRESET_SUMMARY_ID,
+  formatPresetSummary,
+} from "@/components/generator/preset-summary";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 type FormErrors = {
@@ -40,10 +47,18 @@ export function GeneratorForm({
   onChange: (values: GeneratorInputParsed) => void;
   onSubmit: () => void;
 }) {
+  const [customizing, setCustomizing] = useState(false);
   const count = values.eventDescription.length;
   const countLabel = dictionary.generator.characterCount
     .replace("{count}", String(count))
     .replace("{max}", String(EVENT_DESCRIPTION_MAX));
+
+  function toggleCustomization() {
+    if (!customizing) {
+      trackEvent("advanced_options_opened", { locale: values.locale });
+    }
+    setCustomizing((open) => !open);
+  }
 
   return (
     <form
@@ -75,7 +90,7 @@ export function GeneratorForm({
           required
           minLength={EVENT_DESCRIPTION_MIN}
           maxLength={EVENT_DESCRIPTION_MAX}
-          rows={7}
+          rows={5}
           value={values.eventDescription}
           aria-describedby={
             errors.eventDescription
@@ -83,7 +98,7 @@ export function GeneratorForm({
               : "event-hint event-count"
           }
           aria-invalid={errors.eventDescription ? true : undefined}
-          className="ink-field mt-2 w-full resize-y px-3 py-3 text-base"
+          className="ink-field decision-field mt-2 w-full resize-y px-3 py-3 text-base"
           placeholder={dictionary.generator.eventPlaceholder}
           onChange={(event) =>
             onChange({ ...values, eventDescription: event.target.value })
@@ -101,74 +116,96 @@ export function GeneratorForm({
         </div>
       </div>
 
-      <OptionGroup
-        legend={dictionary.generator.toneLabel}
-        name="tone"
-        value={values.tone}
-        disabled={pending}
-        options={tones.map((tone) => ({
-          value: tone,
-          label: dictionary.generator.tones[tone],
-        }))}
-        onChange={(tone) => onChange({ ...values, tone: tone as Tone })}
-      />
+      <p id={PRESET_SUMMARY_ID} className="preset-summary mt-4">
+        <span className="preset-summary-label">
+          {dictionary.generator.currentSettings}
+        </span>{" "}
+        {formatPresetSummary(dictionary, values)}
+      </p>
 
-      <OptionGroup
-        legend={dictionary.generator.intensityLabel}
-        name="intensity"
-        value={values.intensity}
-        disabled={pending}
-        options={intensities.map((intensity) => ({
-          value: intensity,
-          label: dictionary.generator.intensities[intensity],
-        }))}
-        onChange={(intensity) =>
-          onChange({ ...values, intensity: intensity as Intensity })
-        }
-      />
+      <button
+        type="button"
+        className="preset-toggle mt-2 inline-flex min-h-11 items-center"
+        aria-expanded={customizing}
+        aria-controls={ADVANCED_OPTIONS_ID}
+        aria-describedby={PRESET_SUMMARY_ID}
+        onClick={toggleCustomization}
+      >
+        {customizing
+          ? dictionary.generator.hideCustomization
+          : dictionary.generator.customizeResult}
+      </button>
 
-      <OptionGroup
-        legend={dictionary.generator.settingLabel}
-        name="setting"
-        value={values.setting}
-        disabled={pending}
-        options={settings.map((setting) => ({
-          value: setting,
-          label: dictionary.generator.settings[setting],
-        }))}
-        onChange={(setting) =>
-          onChange({ ...values, setting: setting as Setting })
-        }
-      />
+      <div id={ADVANCED_OPTIONS_ID} hidden={!customizing}>
+        <OptionGroup
+          legend={dictionary.generator.toneLabel}
+          name="tone"
+          value={values.tone}
+          disabled={pending}
+          options={tones.map((tone) => ({
+            value: tone,
+            label: dictionary.generator.tones[tone],
+          }))}
+          onChange={(tone) => onChange({ ...values, tone: tone as Tone })}
+        />
 
-      <OptionGroup
-        legend={dictionary.generator.timeframeLabel}
-        hint={dictionary.generator.timeframeHint}
-        name="timeframe"
-        value={values.timeframe}
-        disabled={pending}
-        options={timeframes.map((timeframe) => ({
-          value: timeframe,
-          label: dictionary.generator.timeframes[timeframe],
-        }))}
-        onChange={(timeframe) =>
-          onChange({ ...values, timeframe: timeframe as Timeframe })
-        }
-      />
+        <OptionGroup
+          legend={dictionary.generator.intensityLabel}
+          name="intensity"
+          value={values.intensity}
+          disabled={pending}
+          options={intensities.map((intensity) => ({
+            value: intensity,
+            label: dictionary.generator.intensities[intensity],
+          }))}
+          onChange={(intensity) =>
+            onChange({ ...values, intensity: intensity as Intensity })
+          }
+        />
 
-      <OptionGroup
-        legend={dictionary.generator.countLabel}
-        name="count"
-        value={String(values.count)}
-        disabled={pending}
-        options={resultCounts.map((countOption) => ({
-          value: String(countOption),
-          label: dictionary.generator.counts[String(countOption) as "3" | "5"],
-        }))}
-        onChange={(countValue) =>
-          onChange({ ...values, count: Number(countValue) as ResultCount })
-        }
-      />
+        <OptionGroup
+          legend={dictionary.generator.settingLabel}
+          name="setting"
+          value={values.setting}
+          disabled={pending}
+          options={settings.map((setting) => ({
+            value: setting,
+            label: dictionary.generator.settings[setting],
+          }))}
+          onChange={(setting) =>
+            onChange({ ...values, setting: setting as Setting })
+          }
+        />
+
+        <OptionGroup
+          legend={dictionary.generator.timeframeLabel}
+          hint={dictionary.generator.timeframeHint}
+          name="timeframe"
+          value={values.timeframe}
+          disabled={pending}
+          options={timeframes.map((timeframe) => ({
+            value: timeframe,
+            label: dictionary.generator.timeframes[timeframe],
+          }))}
+          onChange={(timeframe) =>
+            onChange({ ...values, timeframe: timeframe as Timeframe })
+          }
+        />
+
+        <OptionGroup
+          legend={dictionary.generator.countLabel}
+          name="count"
+          value={String(values.count)}
+          disabled={pending}
+          options={resultCounts.map((countOption) => ({
+            value: String(countOption),
+            label: dictionary.generator.counts[String(countOption) as "3" | "5"],
+          }))}
+          onChange={(countValue) =>
+            onChange({ ...values, count: Number(countValue) as ResultCount })
+          }
+        />
+      </div>
 
       <div className="sr-only" aria-live="polite">
         {pending ? dictionary.generator.generating : ""}
@@ -177,7 +214,7 @@ export function GeneratorForm({
       <button
         type="submit"
         disabled={pending}
-        className={`generate-btn mt-6${pending ? " is-busy" : ""}`}
+        className={`generate-btn mt-5${pending ? " is-busy" : ""}`}
       >
         <span className="generate-label">
           <span className={pending ? "invisible" : undefined} aria-hidden={pending || undefined}>

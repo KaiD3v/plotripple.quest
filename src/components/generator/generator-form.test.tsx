@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
+import {
+  ADVANCED_OPTIONS_ID,
+  PRESET_SUMMARY_ID,
+} from "@/components/generator/preset-summary";
 import { GeneratorForm } from "@/components/generator/generator-form";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -91,5 +95,77 @@ describe("GeneratorForm", () => {
     expect(html).not.toContain(
       ["challenges.", edgeVendor, ".com"].join(""),
     );
+  });
+
+  it("starts with customization collapsed and a five-row decision field", () => {
+    const dictionary = getDictionary("en");
+    const html = renderToStaticMarkup(
+      <GeneratorForm
+        dictionary={dictionary}
+        values={values}
+        errors={{}}
+        pending={false}
+        onChange={() => undefined}
+        onSubmit={() => undefined}
+      />,
+    );
+
+    expect(html).toContain('rows="5"');
+    expect(html).toContain("resize-y");
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain(`aria-controls="${ADVANCED_OPTIONS_ID}"`);
+    expect(html).toContain(`aria-describedby="${PRESET_SUMMARY_ID}"`);
+    expect(html).toMatch(
+      new RegExp(`id="${ADVANCED_OPTIONS_ID}"[^>]*hidden`),
+    );
+    expect(html).not.toMatch(
+      new RegExp(`id="${PRESET_SUMMARY_ID}"[^>]*aria-live`),
+    );
+    expect(html).toContain(dictionary.generator.customizeResult);
+    expect(html).toContain(dictionary.generator.currentSettings);
+    expect(html).not.toContain(dictionary.generator.hideCustomization);
+    expect(html).toContain(
+      "Mysterious · Moderate · Fantasy · Mixed · 3 consequences",
+    );
+  });
+
+  it("localizes the collapsed summary and toggle in Brazilian Portuguese", () => {
+    const dictionary = getDictionary("pt-br");
+    const html = renderToStaticMarkup(
+      <GeneratorForm
+        dictionary={dictionary}
+        values={{ ...values, locale: "pt-br" }}
+        errors={{}}
+        pending={false}
+        onChange={() => undefined}
+        onSubmit={() => undefined}
+      />,
+    );
+
+    expect(html).toContain(dictionary.generator.customizeResult);
+    expect(html).toContain(dictionary.generator.currentSettings);
+    expect(html).toContain(
+      "Misterioso · Moderada · Fantasia · Misto · 3 consequências",
+    );
+    expect(html).toContain(dictionary.generator.submit);
+  });
+
+  it("keeps option groups disabled while generation is pending", () => {
+    const dictionary = getDictionary("en");
+    const html = renderToStaticMarkup(
+      <GeneratorForm
+        dictionary={dictionary}
+        values={values}
+        errors={{}}
+        pending
+        onChange={() => undefined}
+        onSubmit={() => undefined}
+      />,
+    );
+
+    expect(html).toContain("<fieldset");
+    expect(html).toMatch(/<fieldset[^>]*disabled/);
+    expect(html).toMatch(/<button[^>]*type="submit"[^>]*disabled/);
+    expect(html).not.toMatch(/<textarea[^>]*disabled/);
   });
 });
