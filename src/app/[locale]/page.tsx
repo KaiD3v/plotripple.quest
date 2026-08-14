@@ -9,7 +9,6 @@ import { OrnamentDivider } from "@/components/ui/ornament-divider";
 import { RippleOrnament } from "@/components/ui/ripple-ornament";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { getPublicTurnstileSiteKey } from "@/lib/env";
 import {
   buildPageMetadata,
   webApplicationJsonLd,
@@ -65,7 +64,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         <GeneratorWorkshop
           locale={locale}
           dictionary={dictionary}
-          turnstileSiteKey={getPublicTurnstileSiteKey()}
         />
       </div>
 

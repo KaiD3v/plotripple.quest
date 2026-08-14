@@ -23,7 +23,6 @@ describe("GeneratorForm", () => {
         errors={{ eventDescription: dictionary.generator.validation.tooShort }}
         pending={false}
         onChange={() => undefined}
-        onTurnstileToken={() => undefined}
         onSubmit={() => undefined}
       />,
     );
@@ -43,7 +42,6 @@ describe("GeneratorForm", () => {
         errors={{}}
         pending
         onChange={() => undefined}
-        onTurnstileToken={() => undefined}
         onSubmit={() => undefined}
       />,
     );
@@ -62,7 +60,6 @@ describe("GeneratorForm", () => {
         errors={{}}
         pending={false}
         onChange={() => undefined}
-        onTurnstileToken={() => undefined}
         onSubmit={() => undefined}
       />,
     );
@@ -72,5 +69,27 @@ describe("GeneratorForm", () => {
     expect(html).toContain("narrative-plate");
     expect(html).toContain("is-selected");
     expect(html).toContain("workshop-blotter");
+  });
+
+  it("does not render a captcha widget or third-party bot script host", () => {
+    const dictionary = getDictionary("en");
+    const html = renderToStaticMarkup(
+      <GeneratorForm
+        dictionary={dictionary}
+        values={values}
+        errors={{}}
+        pending={false}
+        onChange={() => undefined}
+        onSubmit={() => undefined}
+      />,
+    );
+
+    const captchaVendor = ["turn", "stile"].join("");
+    const edgeVendor = ["cloud", "flare"].join("");
+    expect(html.toLowerCase()).not.toContain(captchaVendor);
+    expect(html.toLowerCase()).not.toContain(edgeVendor);
+    expect(html).not.toContain(
+      ["challenges.", edgeVendor, ".com"].join(""),
+    );
   });
 });

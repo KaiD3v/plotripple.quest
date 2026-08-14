@@ -44,7 +44,7 @@ import { GeneratorResult } from "@/components/generator/generator-result";
 import { GenerationHistory } from "@/components/generator/generation-history";
 import { GeneratorWorkshopLayout } from "@/components/generator/generator-workshop-layout";
 
-const defaultValues: Omit<GeneratorInputParsed, "turnstileToken" | "locale"> = {
+const defaultValues: Omit<GeneratorInputParsed, "locale"> = {
   eventDescription: "",
   tone: "mysterious",
   intensity: "moderate",
@@ -56,15 +56,11 @@ const defaultValues: Omit<GeneratorInputParsed, "turnstileToken" | "locale"> = {
 export function GeneratorWorkshop({
   locale,
   dictionary,
-  turnstileSiteKey,
 }: {
   locale: Locale;
   dictionary: Dictionary;
-  turnstileSiteKey?: string;
 }) {
   const [values, setValues] = useState({ ...defaultValues, locale });
-  const [turnstileToken, setTurnstileToken] = useState("");
-  const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const [result, setResult] = useState<GenerationResult | null>(null);
   const [canvasReady, setCanvasReady] = useState(false);
   const [canvasHref, setCanvasHref] = useState<string | null>(null);
@@ -117,7 +113,6 @@ export function GeneratorWorkshop({
     const parsed = generatorInputSchema.safeParse({
       ...values,
       locale,
-      turnstileToken: turnstileToken || undefined,
     });
     if (parsed.success) {
       setFormError(undefined);
@@ -159,7 +154,6 @@ export function GeneratorWorkshop({
         body: JSON.stringify({
           ...values,
           locale,
-          turnstileToken: turnstileToken || undefined,
         }),
       });
 
@@ -250,10 +244,6 @@ export function GeneratorWorkshop({
       );
     } finally {
       setPending(false);
-      if (turnstileSiteKey) {
-        setTurnstileToken("");
-        setTurnstileResetSignal((signal) => signal + 1);
-      }
     }
   }
 
@@ -338,10 +328,7 @@ export function GeneratorWorkshop({
             values={values}
             errors={{ eventDescription: formError }}
             pending={pending}
-            turnstileSiteKey={turnstileSiteKey}
-            turnstileResetSignal={turnstileResetSignal}
             onChange={setValues}
-            onTurnstileToken={setTurnstileToken}
             onSubmit={() => void generate()}
           />
           {requestError ? (

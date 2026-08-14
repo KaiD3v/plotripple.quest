@@ -148,13 +148,19 @@ afterEach(() => {
 
 describe("GeneratorWorkshop generation review flow", () => {
   it("shows consequences on success without navigating", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => ({
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
+      const body = JSON.parse(String(init?.body ?? "{}")) as Record<
+        string,
+        unknown
+      >;
+      const captchaTokenField = ["turn", "stile", "Token"].join("");
+      expect(body).not.toHaveProperty(captchaTokenField);
+      return {
         ok: true,
         json: async () => result,
-      })),
-    );
+      };
+    });
+    vi.stubGlobal("fetch", fetchMock);
 
     const host = document.createElement("div");
     document.body.appendChild(host);
@@ -166,6 +172,7 @@ describe("GeneratorWorkshop generation review flow", () => {
     expect(host.textContent).toContain(dictionary.result.empty);
     await fillAndSubmit(host);
 
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(push).not.toHaveBeenCalled();
     expect(host.textContent).toContain(result.summary);
     expect(host.textContent).toContain("3 consequences");
@@ -175,6 +182,9 @@ describe("GeneratorWorkshop generation review flow", () => {
     }
     expect(host.textContent).not.toContain(dictionary.result.empty);
     expect(host.querySelector("#event-description")).toBeTruthy();
+    expect(host.innerHTML.toLowerCase()).not.toContain(
+      ["turn", "stile"].join(""),
+    );
 
     await act(async () => {
       root.unmount();

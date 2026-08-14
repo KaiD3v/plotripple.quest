@@ -20,7 +20,6 @@ import {
 } from "@/types/generator";
 import { NarrativeOption } from "@/components/generator/narrative-option";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { TurnstileWidget } from "@/components/ui/turnstile-widget";
 
 type FormErrors = {
   eventDescription?: string;
@@ -31,20 +30,14 @@ export function GeneratorForm({
   values,
   errors,
   pending,
-  turnstileSiteKey,
-  turnstileResetSignal,
   onChange,
-  onTurnstileToken,
   onSubmit,
 }: {
   dictionary: Dictionary;
-  values: Omit<GeneratorInputParsed, "turnstileToken">;
+  values: GeneratorInputParsed;
   errors: FormErrors;
   pending: boolean;
-  turnstileSiteKey?: string;
-  turnstileResetSignal?: number;
-  onChange: (values: Omit<GeneratorInputParsed, "turnstileToken">) => void;
-  onTurnstileToken: (token: string) => void;
+  onChange: (values: GeneratorInputParsed) => void;
   onSubmit: () => void;
 }) {
   const count = values.eventDescription.length;
@@ -176,16 +169,6 @@ export function GeneratorForm({
           onChange({ ...values, count: Number(countValue) as ResultCount })
         }
       />
-
-      {turnstileSiteKey ? (
-        <div className="mt-5">
-          <TurnstileWidget
-            siteKey={turnstileSiteKey}
-            onToken={onTurnstileToken}
-            resetSignal={turnstileResetSignal}
-          />
-        </div>
-      ) : null}
 
       <div className="sr-only" aria-live="polite">
         {pending ? dictionary.generator.generating : ""}
