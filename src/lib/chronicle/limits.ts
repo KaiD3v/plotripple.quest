@@ -1,0 +1,4 @@
+export const CHRONICLE_EXPAND_FOLLOW_UP_COUNT = 2;
+export const CHRONICLE_MAX_DEPTH = 3;
+export const CHRONICLE_MAX_NODES = 25;
+export const CHRONICLE_LIBRARY_MAX_ITEMS = 20;
