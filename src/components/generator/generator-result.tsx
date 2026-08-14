@@ -3,11 +3,13 @@
 import { Copy, Map, RefreshCw } from "lucide-react";
 import { useState, type Ref } from "react";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import type { Locale } from "@/i18n/config";
 import { formatResultAsText } from "@/lib/format-result";
 import { trackEvent } from "@/lib/analytics";
 import type { GenerationResult } from "@/types/generator";
 import { ConsequenceCard } from "@/components/generator/consequence-card";
 import { EmptyResult } from "@/components/generator/empty-result";
+import { ExampleResultPreview } from "@/components/generator/example-result-preview";
 import { ResultTimeline } from "@/components/generator/result-timeline";
 import { SectionHeading } from "@/components/ui/section-heading";
 
@@ -15,22 +17,31 @@ export function GeneratorResult({
   result,
   dictionary,
   pending,
+  locale,
   resultRef,
   canvasReady = false,
   onExploreMap,
   onRegenerate,
+  onUseExample,
 }: {
   result: GenerationResult | null;
   dictionary: Dictionary;
   pending: boolean;
+  locale: Locale;
   resultRef?: Ref<HTMLDivElement>;
   canvasReady?: boolean;
   onExploreMap?: () => void;
   onRegenerate: () => void;
+  onUseExample: (decision: string) => void;
 }) {
-  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">(
-    "idle",
-  );
+  const [copyFeedback, setCopyFeedback] = useState<{
+    result: GenerationResult | null;
+    status: "idle" | "copied" | "failed";
+  }>({ result: null, status: "idle" });
+  const copyState =
+    result !== null && copyFeedback.result === result
+      ? copyFeedback.status
+      : "idle";
   const mixed =
     !!result && new Set(result.consequences.map((item) => item.timeframe)).size > 1;
   const folioState = result
@@ -38,6 +49,13 @@ export function GeneratorResult({
       ? " folio-updating"
       : ""
     : " folio-idle";
+  const statusAnnouncement = pending
+    ? dictionary.generator.generating
+    : copyState === "failed"
+      ? dictionary.result.copyFailed
+      : result
+        ? dictionary.result.ready
+        : "";
   const consequenceCount = result
     ? dictionary.result.consequenceCount.replace(
         "{count}",
@@ -49,10 +67,10 @@ export function GeneratorResult({
     const text = formatResultAsText(currentResult, dictionary);
     try {
       await navigator.clipboard.writeText(text);
-      setCopyState("copied");
+      setCopyFeedback({ result: currentResult, status: "copied" });
       trackEvent("result_copy");
     } catch {
-      setCopyState("failed");
+      setCopyFeedback({ result: currentResult, status: "failed" });
     }
   }
 
@@ -60,7 +78,6 @@ export function GeneratorResult({
     <div ref={resultRef} tabIndex={-1} className="result-focus-target">
       <section
         aria-labelledby="result-heading"
-        aria-live="polite"
         aria-busy={pending || undefined}
       >
         <div className={`folio p-4 sm:p-5${result ? " folio-reveal" : ""}${folioState}`}>
@@ -86,18 +103,16 @@ export function GeneratorResult({
               </button>
             ) : null}
           </div>
+          <div id="result-status" className="sr-only" role="status">
+            {statusAnnouncement}
+          </div>
           {pending && result ? (
-            <p className="mt-2 text-sm text-bronze" role="status">
+            <p className="mt-2 text-sm text-bronze">
               {dictionary.generator.generating}
             </p>
           ) : null}
-          {result && !pending ? (
-            <p className="sr-only" role="status">
-              {dictionary.result.ready}
-            </p>
-          ) : null}
           {copyState === "failed" ? (
-            <p className="mt-2 text-sm text-oxblood" role="status">
+            <p className="mt-2 text-sm text-oxblood">
               {dictionary.result.copyFailed}
             </p>
           ) : null}
@@ -153,8 +168,16 @@ export function GeneratorResult({
               </div>
             </>
           ) : (
-            <div className="folio-idle-body">
-              <EmptyResult dictionary={dictionary} pending={pending} />
+            <div className={pending ? "folio-idle-body" : "folio-example-body"}>
+              {pending ? (
+                <EmptyResult dictionary={dictionary} pending />
+              ) : (
+                <ExampleResultPreview
+                  locale={locale}
+                  dictionary={dictionary}
+                  onUseExample={onUseExample}
+                />
+              )}
             </div>
           )}
         </div>

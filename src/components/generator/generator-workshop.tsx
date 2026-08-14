@@ -278,6 +278,14 @@ export function GeneratorWorkshop({
     field?.focus();
   }
 
+  function applyExample(decision: string) {
+    setValues((current) => ({ ...current, eventDescription: decision }));
+    const field = document.getElementById(
+      "event-description",
+    ) as HTMLTextAreaElement | null;
+    bringResultIntoView(field, { focus: true, scroll: "mobile" });
+  }
+
   function openMap(item: Extract<RecentDeviceItem, { kind: "chronicle" }>) {
     trackEvent("history_opened", {
       locale,
@@ -343,10 +351,12 @@ export function GeneratorWorkshop({
           result={result}
           dictionary={dictionary}
           pending={pending}
+          locale={locale}
           resultRef={resultRef}
           canvasReady={canvasReady}
           onExploreMap={exploreMap}
           onRegenerate={generateAgain}
+          onUseExample={applyExample}
         />
       }
       history={
