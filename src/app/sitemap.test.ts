@@ -19,6 +19,10 @@ describe("sitemap", () => {
         `${siteUrl}/pt-br/terms`,
       ]),
     );
+    expect(urls.some((url) => url.includes("/canvas/demo"))).toBe(false);
+    expect(urls.some((url) => url.endsWith("/canvas") || url.includes("/canvas?"))).toBe(
+      false,
+    );
   });
 });
 

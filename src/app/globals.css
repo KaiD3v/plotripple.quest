@@ -545,6 +545,343 @@ h3,
   }
 }
 
+.chronicle-devbar {
+  border: 1px dashed rgb(105 128 96 / 0.55);
+  background: rgb(8 20 15 / 0.72);
+  color: var(--sage);
+}
+
+.chronicle-devbar a[aria-current="page"] {
+  color: var(--bone);
+  box-shadow: inset 0 -2px 0 var(--gold);
+}
+
+.chronicle-map {
+  position: relative;
+  height: clamp(38.75rem, 72vh, 56.25rem);
+  min-height: 38.75rem;
+  max-height: 56.25rem;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 18% 42%, rgb(35 74 54 / 0.28), transparent 58%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 42%),
+    var(--surface);
+  border: 1px solid rgb(105 128 96 / 0.28);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+}
+
+.chronicle-map.is-panning {
+  cursor: grabbing;
+}
+
+.chronicle-map-controls {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  inset: 0.7rem auto auto 0.7rem;
+}
+
+.chronicle-map-btn {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(105 128 96 / 0.45);
+  background: rgb(8 20 15 / 0.88);
+  padding: 0 0.75rem;
+  color: var(--bone);
+  font-size: 0.8rem;
+}
+
+.chronicle-map-btn:hover:not(:disabled) {
+  border-color: var(--moss);
+}
+
+.chronicle-map-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.chronicle-stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.chronicle-thread {
+  fill: none;
+  stroke: rgb(110 85 51 / 0.55);
+  stroke-width: 1.35;
+  stroke-linecap: round;
+}
+
+.chronicle-thread.is-related {
+  stroke: var(--gold);
+  stroke-width: 2.1;
+}
+
+.chronicle-thread.is-dismissed {
+  stroke: rgb(110 85 51 / 0.28);
+  stroke-dasharray: 4 5;
+}
+
+.chronicle-node {
+  display: grid;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.7rem 0.8rem 0.8rem;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chronicle-node:active {
+  filter: brightness(0.97);
+}
+
+.chronicle-node .timeframe-mark {
+  position: static;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.chronicle-node.is-map {
+  position: absolute;
+}
+
+.chronicle-seal {
+  color: var(--bone);
+  background:
+    radial-gradient(circle at 50% 28%, rgb(196 160 90 / 0.18), transparent 52%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 46%),
+    var(--elevated);
+  border: 1px solid rgb(196 160 90 / 0.38);
+  box-shadow: inset 0 0 0 1px rgb(8 20 15 / 0.35);
+}
+
+.chronicle-seal-rings {
+  width: 2.1rem;
+  height: 2.1rem;
+  color: var(--gold);
+}
+
+.chronicle-slip {
+  color: var(--parchment-ink);
+  background:
+    linear-gradient(90deg, rgb(91 70 38 / 0.16), transparent 1.1rem),
+    linear-gradient(180deg, rgb(255 255 255 / 0.28), transparent 30%),
+    var(--parchment);
+  border: 1px solid rgb(91 70 38 / 0.28);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.34);
+}
+
+.chronicle-slip.is-follow-up {
+  background:
+    linear-gradient(90deg, rgb(91 70 38 / 0.12), transparent 1.1rem),
+    repeating-linear-gradient(
+      -12deg,
+      transparent,
+      transparent 7px,
+      rgb(91 70 38 / 0.06) 7px,
+      rgb(91 70 38 / 0.06) 8px
+    ),
+    var(--parchment-light);
+  border-style: dashed;
+}
+
+.chronicle-node.is-selected {
+  box-shadow:
+    inset 3px 0 0 var(--gold),
+    0 0 0 1px rgb(196 160 90 / 0.55);
+}
+
+.chronicle-node.is-related:not(.is-selected) {
+  box-shadow: inset 3px 0 0 rgb(196 160 90 / 0.55);
+}
+
+.chronicle-node.is-dimmed {
+  opacity: 0.42;
+}
+
+.chronicle-node.is-status-active:not(.is-dimmed):not(.is-selected) {
+  box-shadow: inset 0 0 0 1px rgb(196 160 90 / 0.55);
+}
+
+.chronicle-node.is-status-resolved:not(.is-dimmed) {
+  background-image: linear-gradient(
+    180deg,
+    rgb(105 128 96 / 0.12),
+    transparent 55%
+  );
+}
+
+.chronicle-node.is-status-dismissed {
+  opacity: 0.68;
+}
+
+.chronicle-node.is-status-dismissed.is-dimmed {
+  opacity: 0.34;
+}
+
+.chronicle-node.is-status-dismissed .status-mark {
+  color: var(--sage);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chronicle-node.is-map:hover:not(.is-selected):not(:disabled) {
+    box-shadow: inset 3px 0 0 rgb(196 160 90 / 0.38);
+  }
+}
+
+.chronicle-tree {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.chronicle-branch {
+  position: relative;
+  display: grid;
+  gap: 0.85rem;
+  padding-left: 1.25rem;
+  border-left: 1px solid rgb(110 85 51 / 0.45);
+}
+
+.chronicle-branch::before {
+  content: "";
+  position: absolute;
+  top: 1.2rem;
+  left: -1.15rem;
+  width: 1.15rem;
+  height: 1px;
+  background: rgb(110 85 51 / 0.45);
+}
+
+.chronicle-details {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.24), transparent 22%),
+    var(--parchment);
+  color: var(--parchment-ink);
+  border-top: 1px solid rgb(110 85 51 / 0.35);
+  box-shadow: 0 -18px 36px rgb(0 0 0 / 0.28);
+}
+
+.chronicle-details-desktop {
+  max-height: clamp(38.75rem, 72vh, 56.25rem);
+  overflow-y: auto;
+}
+
+.chronicle-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgb(8 20 15 / 0.55);
+}
+
+.chronicle-dialog {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 31;
+  display: flex;
+  max-height: min(78vh, 36rem);
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+.chronicle-details :focus-visible {
+  outline-color: var(--parchment-ink);
+}
+
+.chronicle-details .timeframe-mark {
+  position: static;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .chronicle-details {
+    border: 1px solid rgb(91 70 38 / 0.18);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.34),
+      0 18px 36px rgb(0 0 0 / 0.28);
+  }
+}
+
+.status-mark {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex-shrink: 0;
+  color: var(--bronze);
+}
+
+.chronicle-outline summary {
+  cursor: pointer;
+}
+
+.chronicle-outline[open] {
+  border-color: rgb(196 160 90 / 0.45);
+  box-shadow: inset 2px 0 0 var(--gold);
+}
+
+.chronicle-outline summary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.chronicle-hint {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--sage);
+}
+
+.chronicle-empty {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgb(196 160 90 / 0.28);
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent,
+      transparent 1.75rem,
+      rgb(196 160 90 / 0.07) 1.75rem,
+      rgb(196 160 90 / 0.07) 1.8rem
+    ),
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 42%),
+    var(--elevated);
+  padding: 2.25rem 1.5rem 2rem;
+}
+
+.chronicle-empty-seal {
+  width: 4.5rem;
+  height: 4.5rem;
+  color: var(--gold);
+  opacity: 0.62;
+}
+
+.chronicle-empty-cta {
+  border: 1px solid rgb(196 160 90 / 0.55);
+  background: rgb(8 20 15 / 0.35);
+}
+
+.chronicle-empty-cta:hover {
+  border-color: var(--gold);
+  color: var(--bone);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;
