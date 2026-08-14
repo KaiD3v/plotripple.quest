@@ -3,8 +3,10 @@ import {
   DEFAULT_DEV_SITE_URL,
   DEFAULT_GEMINI_MODEL,
   DEFAULT_PROD_SITE_URL,
+  getAdSenseClientId,
   getGeminiRuntimeEnv,
   getSiteUrl,
+  getUnregulatedConsentDefault,
   getUpstashRedisConfig,
 } from "@/lib/env";
 
@@ -49,6 +51,65 @@ describe("getGeminiRuntimeEnv", () => {
       apiKey: "test-key",
       model: "gemini-3.6-flash",
     });
+  });
+});
+
+describe("getAdSenseClientId", () => {
+  it("returns a trimmed valid Publisher ID", () => {
+    expect(
+      getAdSenseClientId({
+        NEXT_PUBLIC_ADSENSE_CLIENT_ID: "  ca-pub-1234567890123456  ",
+      }),
+    ).toBe("ca-pub-1234567890123456");
+  });
+
+  it("returns undefined when the variable is absent", () => {
+    expect(getAdSenseClientId({})).toBeUndefined();
+  });
+
+  it("returns undefined when the value is empty or whitespace", () => {
+    expect(getAdSenseClientId({ NEXT_PUBLIC_ADSENSE_CLIENT_ID: "" })).toBeUndefined();
+    expect(
+      getAdSenseClientId({ NEXT_PUBLIC_ADSENSE_CLIENT_ID: "   " }),
+    ).toBeUndefined();
+  });
+
+  it("returns undefined for invalid Publisher IDs", () => {
+    expect(
+      getAdSenseClientId({ NEXT_PUBLIC_ADSENSE_CLIENT_ID: "ca-pub-" }),
+    ).toBeUndefined();
+    expect(
+      getAdSenseClientId({ NEXT_PUBLIC_ADSENSE_CLIENT_ID: "ca-pub-abc" }),
+    ).toBeUndefined();
+    expect(
+      getAdSenseClientId({ NEXT_PUBLIC_ADSENSE_CLIENT_ID: "pub-1234567890" }),
+    ).toBeUndefined();
+    expect(
+      getAdSenseClientId({
+        NEXT_PUBLIC_ADSENSE_CLIENT_ID: "ca-pub-123456789012345",
+      }),
+    ).toBeUndefined();
+    expect(
+      getAdSenseClientId({
+        NEXT_PUBLIC_ADSENSE_CLIENT_ID: "ca-pub-12345678901234567",
+      }),
+    ).toBeUndefined();
+  });
+});
+
+describe("getUnregulatedConsentDefault", () => {
+  it("defaults to denied and only accepts granted or denied", () => {
+    expect(getUnregulatedConsentDefault({})).toBe("denied");
+    expect(
+      getUnregulatedConsentDefault({
+        NEXT_PUBLIC_CONSENT_DEFAULT_UNREGULATED: "granted",
+      }),
+    ).toBe("granted");
+    expect(
+      getUnregulatedConsentDefault({
+        NEXT_PUBLIC_CONSENT_DEFAULT_UNREGULATED: "nope",
+      }),
+    ).toBe("denied");
   });
 });
 

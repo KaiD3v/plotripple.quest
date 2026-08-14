@@ -1,3 +1,8 @@
+import {
+  parseUnregulatedConsentDefault,
+  type ConsentState,
+} from "@/lib/google-consent";
+
 export const DEFAULT_GEMINI_MODEL = "gemini-3.5-flash";
 export const DEFAULT_DEV_SITE_URL = "http://localhost:3000";
 export const DEFAULT_PROD_SITE_URL = "https://plotripple.quest";
@@ -21,6 +26,32 @@ export function getSiteUrl(env: EnvSource = process.env): string {
 export function getGaMeasurementId(env: EnvSource = process.env): string | undefined {
   const value = env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim();
   return value ? value : undefined;
+}
+
+const ADSENSE_CLIENT_ID_PATTERN = /^ca-pub-[0-9]{16}$/;
+
+export function parseAdSenseClientId(
+  value: string | undefined,
+): string | undefined {
+  const trimmed = value?.trim();
+  if (!trimmed || !ADSENSE_CLIENT_ID_PATTERN.test(trimmed)) {
+    return undefined;
+  }
+  return trimmed;
+}
+
+export function getAdSenseClientId(
+  env: EnvSource = process.env,
+): string | undefined {
+  return parseAdSenseClientId(env.NEXT_PUBLIC_ADSENSE_CLIENT_ID);
+}
+
+export function getUnregulatedConsentDefault(
+  env: EnvSource = process.env,
+): ConsentState {
+  return parseUnregulatedConsentDefault(
+    env.NEXT_PUBLIC_CONSENT_DEFAULT_UNREGULATED,
+  );
 }
 
 export type GeminiRuntimeEnv = {
