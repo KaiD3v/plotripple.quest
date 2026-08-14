@@ -15,6 +15,8 @@ export const analyticsEvents = [
   "language_change",
   "language_changed",
   "related_tool_click",
+  "advanced_options_opened",
+  "example_selected",
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];

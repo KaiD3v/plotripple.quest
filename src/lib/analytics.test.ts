@@ -67,11 +67,19 @@ describe("trackEvent", () => {
     trackEvent("generator_view", { locale: "en" });
     trackEvent("generator_submit", { tone: "dark" });
     trackEvent("language_changed", { language: "pt-br" });
+    trackEvent("advanced_options_opened", { locale: "pt-br" });
+    trackEvent("example_selected", { locale: "en" });
 
     expect(gtag).toHaveBeenCalledWith("event", "generator_view", { locale: "en" });
     expect(gtag).toHaveBeenCalledWith("event", "generator_submit", { tone: "dark" });
     expect(gtag).toHaveBeenCalledWith("event", "language_changed", {
       language: "pt-br",
+    });
+    expect(gtag).toHaveBeenCalledWith("event", "advanced_options_opened", {
+      locale: "pt-br",
+    });
+    expect(gtag).toHaveBeenCalledWith("event", "example_selected", {
+      locale: "en",
     });
   });
 
@@ -93,6 +101,8 @@ describe("trackEvent", () => {
       "language_change",
       "language_changed",
       "related_tool_click",
+      "advanced_options_opened",
+      "example_selected",
     ]);
   });
 });
