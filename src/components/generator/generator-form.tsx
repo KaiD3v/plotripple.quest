@@ -32,6 +32,7 @@ export function GeneratorForm({
   errors,
   pending,
   turnstileSiteKey,
+  turnstileResetSignal,
   onChange,
   onTurnstileToken,
   onSubmit,
@@ -41,6 +42,7 @@ export function GeneratorForm({
   errors: FormErrors;
   pending: boolean;
   turnstileSiteKey?: string;
+  turnstileResetSignal?: number;
   onChange: (values: Omit<GeneratorInputParsed, "turnstileToken">) => void;
   onTurnstileToken: (token: string) => void;
   onSubmit: () => void;
@@ -180,6 +182,7 @@ export function GeneratorForm({
           <TurnstileWidget
             siteKey={turnstileSiteKey}
             onToken={onTurnstileToken}
+            resetSignal={turnstileResetSignal}
           />
         </div>
       ) : null}

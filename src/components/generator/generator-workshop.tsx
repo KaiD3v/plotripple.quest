@@ -64,6 +64,7 @@ export function GeneratorWorkshop({
 }) {
   const [values, setValues] = useState({ ...defaultValues, locale });
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const [result, setResult] = useState<GenerationResult | null>(null);
   const [canvasReady, setCanvasReady] = useState(false);
   const [canvasHref, setCanvasHref] = useState<string | null>(null);
@@ -249,6 +250,10 @@ export function GeneratorWorkshop({
       );
     } finally {
       setPending(false);
+      if (turnstileSiteKey) {
+        setTurnstileToken("");
+        setTurnstileResetSignal((signal) => signal + 1);
+      }
     }
   }
 
@@ -334,6 +339,7 @@ export function GeneratorWorkshop({
             errors={{ eventDescription: formError }}
             pending={pending}
             turnstileSiteKey={turnstileSiteKey}
+            turnstileResetSignal={turnstileResetSignal}
             onChange={setValues}
             onTurnstileToken={setTurnstileToken}
             onSubmit={() => void generate()}
