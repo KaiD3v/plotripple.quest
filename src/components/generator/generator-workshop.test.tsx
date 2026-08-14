@@ -112,6 +112,12 @@ async function renderTree(host: HTMLElement, node: ReactNode): Promise<Root> {
   return root;
 }
 
+function eventsNamed(gtag: ReturnType<typeof vi.fn>, name: string) {
+  return gtag.mock.calls.filter(
+    (call) => call[0] === "event" && call[1] === name,
+  );
+}
+
 async function fillAndSubmit(host: HTMLElement, text = decision) {
   const textarea = host.querySelector(
     "#event-description",
@@ -566,6 +572,171 @@ describe("GeneratorWorkshop example preview", () => {
       locale: "en",
     });
     expect(JSON.stringify(gtag.mock.calls)).not.toContain("temple");
+
+    await act(async () => {
+      root.unmount();
+    });
+    host.remove();
+  });
+});
+
+describe("GeneratorWorkshop analytics funnel", () => {
+  it("emits generator_success once and never the legacy aliases", async () => {
+    const gtag = vi.fn();
+    window.gtag = gtag;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => result,
+      })),
+    );
+
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = await renderTree(
+      host,
+      <GeneratorWorkshop locale="en" dictionary={dictionary} />,
+    );
+
+    await fillAndSubmit(host);
+
+    expect(eventsNamed(gtag, "generator_success")).toHaveLength(1);
+    expect(eventsNamed(gtag, "generator_success")[0]?.[2]).toMatchObject({
+      locale: "en",
+      tone: "mysterious",
+      intensity: "moderate",
+      setting: "fantasy",
+      timeframe: "mixed",
+      result_count: 3,
+    });
+    expect(eventsNamed(gtag, "generation_succeeded")).toHaveLength(0);
+    expect(eventsNamed(gtag, "generation_result_viewed")).toHaveLength(0);
+    expect(JSON.stringify(gtag.mock.calls)).not.toContain("spared");
+    expect(JSON.stringify(gtag.mock.calls)).not.toContain(result.summary);
+
+    await act(async () => {
+      root.unmount();
+    });
+    host.remove();
+  });
+
+  it("emits result_regenerate once from the workshop layer", async () => {
+    const gtag = vi.fn();
+    window.gtag = gtag;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => result,
+      })),
+    );
+
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = await renderTree(
+      host,
+      <GeneratorWorkshop locale="en" dictionary={dictionary} />,
+    );
+
+    await fillAndSubmit(host);
+    const again = Array.from(host.querySelectorAll("button")).find((button) =>
+      button.textContent?.includes(dictionary.result.regenerate),
+    );
+    await act(async () => {
+      again?.click();
+    });
+
+    expect(eventsNamed(gtag, "result_regenerate")).toHaveLength(1);
+    expect(eventsNamed(gtag, "result_regenerate")[0]?.[2]).toMatchObject({
+      locale: "en",
+      tone: "mysterious",
+      result_count: 3,
+    });
+    expect(eventsNamed(gtag, "generator_regenerate")).toHaveLength(0);
+
+    await act(async () => {
+      root.unmount();
+    });
+    host.remove();
+  });
+
+  it("opens the canvas from the result with source result", async () => {
+    const gtag = vi.fn();
+    window.gtag = gtag;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => result,
+      })),
+    );
+
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = await renderTree(
+      host,
+      <GeneratorWorkshop locale="en" dictionary={dictionary} />,
+    );
+
+    await fillAndSubmit(host);
+    const explore = Array.from(host.querySelectorAll("button")).find((button) =>
+      button.textContent?.includes(dictionary.result.exploreMap),
+    );
+    await act(async () => {
+      explore?.click();
+    });
+
+    expect(eventsNamed(gtag, "canvas_opened")).toHaveLength(1);
+    expect(eventsNamed(gtag, "canvas_opened")[0]?.[2]).toEqual({
+      locale: "en",
+      result_count: 3,
+      source: "result",
+    });
+    expect(eventsNamed(gtag, "history_opened")).toHaveLength(0);
+
+    await act(async () => {
+      root.unmount();
+    });
+    host.remove();
+  });
+
+  it("opens the canvas from history with source history", async () => {
+    const gtag = vi.fn();
+    window.gtag = gtag;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => result,
+      })),
+    );
+
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = await renderTree(
+      host,
+      <GeneratorWorkshop locale="en" dictionary={dictionary} />,
+    );
+
+    await fillAndSubmit(host);
+    const openMap = Array.from(host.querySelectorAll("button")).find(
+      (button) => button.textContent === dictionary.history.openMap,
+    );
+    await act(async () => {
+      openMap?.click();
+    });
+
+    expect(eventsNamed(gtag, "canvas_opened")).toHaveLength(1);
+    expect(eventsNamed(gtag, "canvas_opened")[0]?.[2]).toEqual({
+      locale: "en",
+      result_count: 4,
+      source: "history",
+    });
+    expect(eventsNamed(gtag, "history_opened")).toHaveLength(0);
+    expect(JSON.stringify(eventsNamed(gtag, "canvas_opened"))).not.toContain(
+      "chr-",
+    );
 
     await act(async () => {
       root.unmount();

@@ -188,14 +188,6 @@ export function GeneratorWorkshop({
         "generator_success",
         categoricalParams({ duration_bucket: bucket }),
       );
-      trackEvent(
-        "generation_succeeded",
-        categoricalParams({ duration_bucket: bucket }),
-      );
-      trackEvent(
-        "generation_result_viewed",
-        categoricalParams({ duration_bucket: bucket }),
-      );
 
       const navigation = prepareChronicleNavigation(
         payload,
@@ -261,13 +253,13 @@ export function GeneratorWorkshop({
     trackEvent("canvas_opened", {
       locale,
       result_count: result?.consequences.length ?? values.count,
+      source: "result",
     });
     router.push(canvasHref);
   }
 
   function generateAgain() {
     trackEvent("result_regenerate", categoricalParams());
-    trackEvent("generator_regenerate", categoricalParams());
     setResult(null);
     setCanvasReady(false);
     setCanvasHref(null);
@@ -287,14 +279,6 @@ export function GeneratorWorkshop({
   }
 
   function openMap(item: Extract<RecentDeviceItem, { kind: "chronicle" }>) {
-    trackEvent("history_opened", {
-      locale,
-      result_count: item.nodeCount,
-    });
-    trackEvent("canvas_opened", {
-      locale,
-      result_count: item.nodeCount,
-    });
     const opened = openChronicleOnCanvas({
       id: item.id,
       locale,
@@ -307,6 +291,11 @@ export function GeneratorWorkshop({
       );
       return;
     }
+    trackEvent("canvas_opened", {
+      locale,
+      result_count: item.nodeCount,
+      source: "history",
+    });
     setActiveHistoryId(item.id);
     router.push(opened.href);
   }

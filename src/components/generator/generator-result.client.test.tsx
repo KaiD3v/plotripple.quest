@@ -227,4 +227,72 @@ describe("GeneratorResult live status", () => {
     });
     host.remove();
   });
+
+  it("emits result_copy with only locale after a successful copy", async () => {
+    const gtag = vi.fn();
+    window.gtag = gtag;
+    const writeText = vi.fn(async () => undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = createRoot(host);
+    await act(async () => {
+      root.render(<CopyHarness />);
+    });
+
+    const copyButton = Array.from(host.querySelectorAll("button")).find((button) =>
+      button.textContent?.includes(dictionary.result.copy),
+    );
+    await act(async () => {
+      copyButton?.click();
+      await Promise.resolve();
+    });
+
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(gtag).toHaveBeenCalledTimes(1);
+    expect(gtag).toHaveBeenCalledWith("event", "result_copy", { locale: "en" });
+    expect(JSON.stringify(gtag.mock.calls)).not.toContain(result.summary);
+
+    await act(async () => {
+      root.unmount();
+    });
+    host.remove();
+  });
+
+  it("does not emit result_copy when copying fails", async () => {
+    const gtag = vi.fn();
+    window.gtag = gtag;
+    const writeText = vi.fn(() => Promise.reject(new Error("denied")));
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = createRoot(host);
+    await act(async () => {
+      root.render(<CopyHarness />);
+    });
+
+    const copyButton = Array.from(host.querySelectorAll("button")).find((button) =>
+      button.textContent?.includes(dictionary.result.copy),
+    );
+    await act(async () => {
+      copyButton?.click();
+      await Promise.resolve();
+    });
+
+    expect(host.textContent).toContain(dictionary.result.copyFailed);
+    expect(gtag).not.toHaveBeenCalled();
+
+    await act(async () => {
+      root.unmount();
+    });
+    host.remove();
+  });
 });

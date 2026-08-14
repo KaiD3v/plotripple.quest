@@ -68,7 +68,7 @@ export function GeneratorResult({
     try {
       await navigator.clipboard.writeText(text);
       setCopyFeedback({ result: currentResult, status: "copied" });
-      trackEvent("result_copy");
+      trackEvent("result_copy", { locale });
     } catch {
       setCopyFeedback({ result: currentResult, status: "failed" });
     }
@@ -156,10 +156,7 @@ export function GeneratorResult({
                 <button
                   type="button"
                   disabled={pending}
-                  onClick={() => {
-                    trackEvent("result_regenerate");
-                    onRegenerate();
-                  }}
+                  onClick={onRegenerate}
                   className="inline-flex min-h-11 items-center justify-center gap-2 border border-bronze/35 px-4 text-sm text-parchment-ink disabled:opacity-80"
                 >
                   <RefreshCw className="h-4 w-4" aria-hidden="true" />
