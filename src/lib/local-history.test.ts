@@ -82,6 +82,18 @@ describe("local history", () => {
     expect(parseHistory(null)).toEqual([]);
   });
 
+  it("keeps valid entries when one history record is corrupt", () => {
+    const entry = createHistoryEntry(input, result);
+    const parsed = parseHistory(
+      JSON.stringify({
+        v: 1,
+        entries: [entry, { id: "broken" }],
+      }),
+    );
+    expect(parsed).toHaveLength(1);
+    expect(parsed[0]?.id).toBe(entry.id);
+  });
+
   it("keeps only the latest five entries", () => {
     const first = createHistoryEntry(input, result);
     let entries = [first];
