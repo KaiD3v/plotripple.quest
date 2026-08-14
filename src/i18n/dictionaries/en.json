@@ -46,6 +46,9 @@
     "timeframeLabel": "Timeframe",
     "timeframeHint": "Long term returns only long-term ripples. Mixed spreads immediate, next-session, and long-term.",
     "countLabel": "How many consequences",
+    "customizeResult": "Customize result",
+    "hideCustomization": "Hide customization",
+    "currentSettings": "Current settings:",
     "submit": "Generate consequences",
     "generating": "Tracing the ripples of this decision…",
     "tones": {
@@ -109,6 +112,12 @@
     },
     "triggerLabel": "Trigger",
     "affectedLabel": "Affected parties"
+  },
+  "example": {
+    "label": "Example result",
+    "decisionLabel": "Decision",
+    "summaryLabel": "Summary",
+    "useExample": "Use this example"
   },
   "history": {
     "title": "Recent on this device",

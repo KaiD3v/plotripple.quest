@@ -46,6 +46,9 @@
     "timeframeLabel": "Alcance temporal",
     "timeframeHint": "Longo prazo devolve só consequências de longo prazo. Misto combina imediato, próxima sessão e longo prazo.",
     "countLabel": "Quantidade de consequências",
+    "customizeResult": "Personalizar resultado",
+    "hideCustomization": "Ocultar personalização",
+    "currentSettings": "Configuração atual:",
     "submit": "Gerar consequências",
     "generating": "Traçando as repercussões desta decisão…",
     "tones": {
@@ -109,6 +112,12 @@
     },
     "triggerLabel": "Gatilho",
     "affectedLabel": "Partes afetadas"
+  },
+  "example": {
+    "label": "Exemplo de resultado",
+    "decisionLabel": "Decisão",
+    "summaryLabel": "Resumo",
+    "useExample": "Usar este exemplo"
   },
   "history": {
     "title": "Recentes neste dispositivo",
