@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { localizedPath, type Locale } from "@/i18n/config";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { LanguageSwitcherNav } from "@/components/ui/language-switcher";
+import { PrivacyBoundaryLink } from "@/components/ui/privacy-boundary-link";
 
 export function Header({
   locale,
@@ -41,9 +41,9 @@ export function Header({
   }, [open]);
 
   return (
-    <header className="border-b border-forest/60 bg-deep pt-[max(0.5rem,env(safe-area-inset-top))]">
+    <header className="relative z-30 border-b border-forest/60 bg-deep pt-[max(0.5rem,env(safe-area-inset-top))]">
       <div className="page-gutter mx-auto flex max-w-7xl items-center justify-between gap-4 py-2.5">
-        <Link
+        <PrivacyBoundaryLink
           href={localizedPath(locale)}
           className="flex min-h-11 min-w-0 items-center gap-2.5 text-gold"
         >
@@ -51,17 +51,17 @@ export function Header({
           <span className="font-display text-lg tracking-wide text-bone">
             {dictionary.brand.name}
           </span>
-        </Link>
+        </PrivacyBoundaryLink>
 
         <nav className="hidden items-center gap-5 lg:flex" aria-label="Primary">
           {links.map((link) => (
-            <Link
+            <PrivacyBoundaryLink
               key={link.href}
               href={link.href}
               className="inline-flex min-h-11 items-center text-sm text-lichen hover:text-bone"
             >
               {link.label}
-            </Link>
+            </PrivacyBoundaryLink>
           ))}
           <LanguageSwitcherNav locale={locale} label={dictionary.nav.language} />
         </nav>
@@ -87,14 +87,14 @@ export function Header({
           className="mobile-nav-panel page-gutter space-y-1 border-t border-forest/60 py-3 lg:hidden"
         >
           {links.map((link) => (
-            <Link
+            <PrivacyBoundaryLink
               key={link.href}
               href={link.href}
               className="flex min-h-11 items-center text-bone"
               onClick={() => setOpen(false)}
             >
               {link.label}
-            </Link>
+            </PrivacyBoundaryLink>
           ))}
           <LanguageSwitcherNav locale={locale} label={dictionary.nav.language} />
         </nav>

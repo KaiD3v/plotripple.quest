@@ -1,7 +1,7 @@
-import Link from "next/link";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { localizedPath, type Locale } from "@/i18n/config";
 import { BrandLockup } from "@/components/ui/brand-mark";
+import { PrivacyBoundaryLink } from "@/components/ui/privacy-boundary-link";
 
 export function Footer({
   locale,
@@ -20,24 +20,24 @@ export function Footer({
           </p>
         </div>
         <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm" aria-label="Footer">
-          <Link
+          <PrivacyBoundaryLink
             href={localizedPath(locale, "/about")}
             className="inline-flex min-h-11 items-center text-lichen hover:text-bone"
           >
             {dictionary.nav.about}
-          </Link>
-          <Link
+          </PrivacyBoundaryLink>
+          <PrivacyBoundaryLink
             href={localizedPath(locale, "/privacy")}
             className="inline-flex min-h-11 items-center text-lichen hover:text-bone"
           >
             {dictionary.nav.privacy}
-          </Link>
-          <Link
+          </PrivacyBoundaryLink>
+          <PrivacyBoundaryLink
             href={localizedPath(locale, "/terms")}
             className="inline-flex min-h-11 items-center text-lichen hover:text-bone"
           >
             {dictionary.nav.terms}
-          </Link>
+          </PrivacyBoundaryLink>
         </nav>
       </div>
     </footer>
