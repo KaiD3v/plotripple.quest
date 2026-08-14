@@ -110,4 +110,66 @@ describe("bringResultIntoView", () => {
     expect(element.scrollIntoView).toHaveBeenCalled();
     expect(element.focus).not.toHaveBeenCalled();
   });
+
+  it("focuses the example field on desktop without scrolling", () => {
+    const element = mockElement(-100);
+    vi.stubGlobal("window", {
+      innerHeight: 844,
+      matchMedia: () => ({ matches: false }),
+    });
+
+    bringResultIntoView(element as unknown as HTMLElement, {
+      focus: true,
+      scroll: "mobile",
+    });
+
+    expect(element.focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(element.scrollIntoView).not.toHaveBeenCalled();
+  });
+
+  it("focuses and smoothly scrolls the example field on mobile", () => {
+    const element = mockElement(-100);
+    vi.stubGlobal("window", {
+      innerHeight: 844,
+      matchMedia: (query: string) => ({
+        matches: query.includes("prefers-reduced-motion")
+          ? false
+          : query.includes("max-width: 1023px"),
+      }),
+    });
+
+    bringResultIntoView(element as unknown as HTMLElement, {
+      focus: true,
+      scroll: "mobile",
+    });
+
+    expect(element.focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(element.scrollIntoView).toHaveBeenCalledWith({
+      behavior: "smooth",
+      block: "start",
+    });
+  });
+
+  it("focuses and uses instant scroll for the example field when reduced motion is preferred", () => {
+    const element = mockElement(-100);
+    vi.stubGlobal("window", {
+      innerHeight: 844,
+      matchMedia: (query: string) => ({
+        matches:
+          query.includes("prefers-reduced-motion") ||
+          query.includes("max-width: 1023px"),
+      }),
+    });
+
+    bringResultIntoView(element as unknown as HTMLElement, {
+      focus: true,
+      scroll: "mobile",
+    });
+
+    expect(element.focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(element.scrollIntoView).toHaveBeenCalledWith({
+      behavior: "auto",
+      block: "start",
+    });
+  });
 });
