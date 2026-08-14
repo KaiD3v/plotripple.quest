@@ -29,24 +29,24 @@ describe("ConsequenceCard", () => {
     expect(html).toContain('aria-hidden="true"');
   });
 
-  it("uses distinct marks for next session and long term", () => {
+  it("omits optional trigger and affected parties when absent", () => {
     const dictionary = getDictionary("en");
-    const next = renderToStaticMarkup(
+    const html = renderToStaticMarkup(
       <ConsequenceCard
-        consequence={{ ...base, title: "Next", timeframe: "next_session" }}
-        dictionary={dictionary}
-      />,
-    );
-    const later = renderToStaticMarkup(
-      <ConsequenceCard
-        consequence={{ ...base, title: "Later", timeframe: "long_term" }}
+        consequence={{
+          title: "Quiet shift",
+          description: "The watch changes without naming names.",
+          timeframe: "immediate",
+          category: "social",
+          trigger: "",
+          affectedParties: [],
+        }}
         dictionary={dictionary}
       />,
     );
 
-    expect(next).toContain(dictionary.result.timeframes.next_session);
-    expect(next).toContain('data-timeframe="next_session"');
-    expect(later).toContain(dictionary.result.timeframes.long_term);
-    expect(later).toContain('data-timeframe="long_term"');
+    expect(html).toContain("Quiet shift");
+    expect(html).not.toContain(dictionary.result.triggerLabel);
+    expect(html).not.toContain(dictionary.result.affectedLabel);
   });
 });

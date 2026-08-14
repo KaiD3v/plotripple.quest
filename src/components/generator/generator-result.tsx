@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, RefreshCw } from "lucide-react";
+import { Copy, Map, RefreshCw } from "lucide-react";
 import { useState, type Ref } from "react";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { formatResultAsText } from "@/lib/format-result";
@@ -16,12 +16,16 @@ export function GeneratorResult({
   dictionary,
   pending,
   resultRef,
+  canvasReady = false,
+  onExploreMap,
   onRegenerate,
 }: {
   result: GenerationResult | null;
   dictionary: Dictionary;
   pending: boolean;
   resultRef?: Ref<HTMLDivElement>;
+  canvasReady?: boolean;
+  onExploreMap?: () => void;
   onRegenerate: () => void;
 }) {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">(
@@ -34,6 +38,12 @@ export function GeneratorResult({
       ? " folio-updating"
       : ""
     : " folio-idle";
+  const consequenceCount = result
+    ? dictionary.result.consequenceCount.replace(
+        "{count}",
+        String(result.consequences.length),
+      )
+    : null;
 
   async function copyAll(currentResult: GenerationResult) {
     const text = formatResultAsText(currentResult, dictionary);
@@ -64,35 +74,26 @@ export function GeneratorResult({
               {dictionary.result.title}
             </SectionHeading>
             {result ? (
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => void copyAll(result)}
-                  className="inline-flex min-h-11 items-center gap-2 border border-bronze/50 px-3 text-sm text-parchment-ink"
-                >
-                  <Copy className="h-4 w-4" aria-hidden="true" />
-                  {copyState === "copied"
-                    ? dictionary.result.copied
-                    : dictionary.result.copy}
-                </button>
-                <button
-                  type="button"
-                  disabled={pending}
-                  onClick={() => {
-                    trackEvent("result_regenerate");
-                    onRegenerate();
-                  }}
-                  className="inline-flex min-h-11 items-center gap-2 border border-bronze/35 px-3 text-sm text-parchment-ink disabled:opacity-80"
-                >
-                  <RefreshCw className="h-4 w-4" aria-hidden="true" />
-                  {dictionary.result.regenerate}
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => void copyAll(result)}
+                className="inline-flex min-h-11 items-center gap-2 border border-bronze/50 px-3 text-sm text-parchment-ink"
+              >
+                <Copy className="h-4 w-4" aria-hidden="true" />
+                {copyState === "copied"
+                  ? dictionary.result.copied
+                  : dictionary.result.copy}
+              </button>
             ) : null}
           </div>
           {pending && result ? (
             <p className="mt-2 text-sm text-bronze" role="status">
               {dictionary.generator.generating}
+            </p>
+          ) : null}
+          {result && !pending ? (
+            <p className="sr-only" role="status">
+              {dictionary.result.ready}
             </p>
           ) : null}
           {copyState === "failed" ? (
@@ -110,6 +111,9 @@ export function GeneratorResult({
                 <p className="folio-prose mt-2 break-words font-reading text-[1.05rem] leading-relaxed">
                   {result.summary}
                 </p>
+                {consequenceCount ? (
+                  <p className="mt-3 text-sm text-bronze">{consequenceCount}</p>
+                ) : null}
               </div>
 
               <div className="mt-5">
@@ -122,6 +126,30 @@ export function GeneratorResult({
                     />
                   ))}
                 </ResultTimeline>
+              </div>
+
+              <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                <button
+                  type="button"
+                  disabled={pending || !canvasReady || !onExploreMap}
+                  onClick={() => onExploreMap?.()}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 border border-gold/70 bg-gold/15 px-4 text-sm font-semibold text-parchment-ink disabled:opacity-60"
+                >
+                  <Map className="h-4 w-4" aria-hidden="true" />
+                  {dictionary.result.exploreMap}
+                </button>
+                <button
+                  type="button"
+                  disabled={pending}
+                  onClick={() => {
+                    trackEvent("result_regenerate");
+                    onRegenerate();
+                  }}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 border border-bronze/35 px-4 text-sm text-parchment-ink disabled:opacity-80"
+                >
+                  <RefreshCw className="h-4 w-4" aria-hidden="true" />
+                  {dictionary.result.regenerate}
+                </button>
               </div>
             </>
           ) : (

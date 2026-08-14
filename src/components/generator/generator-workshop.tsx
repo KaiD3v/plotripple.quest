@@ -7,6 +7,7 @@ import type { Dictionary } from "@/i18n/get-dictionary";
 import { prepareChronicleNavigation } from "@/lib/chronicle/prepare-navigation";
 import { hydrateLegacyHistoryIntoLibrary } from "@/lib/chronicle/migrate-history-entry";
 import { openChronicleOnCanvas } from "@/lib/chronicle/open-chronicle";
+import { resolveChronicleGraphId } from "@/lib/chronicle/resolve-graph-id";
 import {
   CHRONICLE_LIBRARY_MAX_ITEMS,
 } from "@/lib/chronicle/limits";
@@ -21,6 +22,9 @@ import {
   subscribeRecentDevice,
   type RecentDeviceItem,
 } from "@/lib/chronicle/recent-device";
+import {
+  getChronicleSnapshot,
+} from "@/lib/chronicle/session-repository";
 import { durationBucket, trackEvent } from "@/lib/analytics";
 import {
   getBrowserHistoryStorage,
@@ -61,6 +65,8 @@ export function GeneratorWorkshop({
   const [values, setValues] = useState({ ...defaultValues, locale });
   const [turnstileToken, setTurnstileToken] = useState("");
   const [result, setResult] = useState<GenerationResult | null>(null);
+  const [canvasReady, setCanvasReady] = useState(false);
+  const [canvasHref, setCanvasHref] = useState<string | null>(null);
   const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
   const recents = useSyncExternalStore(
     subscribeRecentDevice,
@@ -135,7 +141,7 @@ export function GeneratorWorkshop({
     return false;
   }
 
-  async function generate(options?: { regenerate?: boolean }) {
+  async function generate() {
     if (pending || !validate()) {
       return;
     }
@@ -144,9 +150,6 @@ export function GeneratorWorkshop({
     setRequestError(undefined);
     const startedAt = Date.now();
     trackEvent("generator_submit", categoricalParams());
-    if (options?.regenerate) {
-      trackEvent("generator_regenerate", categoricalParams());
-    }
 
     try {
       const response = await fetch("/api/generate", {
@@ -190,6 +193,15 @@ export function GeneratorWorkshop({
         "generator_success",
         categoricalParams({ duration_bucket: bucket }),
       );
+      trackEvent(
+        "generation_succeeded",
+        categoricalParams({ duration_bucket: bucket }),
+      );
+      trackEvent(
+        "generation_result_viewed",
+        categoricalParams({ duration_bucket: bucket }),
+      );
+
       const navigation = prepareChronicleNavigation(
         payload,
         locale,
@@ -202,15 +214,29 @@ export function GeneratorWorkshop({
           locale,
         },
       );
-      if (navigation.ok) {
-        setActiveHistoryId(navigation.graph.id ?? null);
-        router.push(navigation.href);
+
+      if (!navigation.ok) {
+        setCanvasReady(false);
+        setCanvasHref(null);
+        setRequestError(
+          dictionary.errors[navigation.code as keyof typeof dictionary.errors] ??
+            dictionary.errors.INTERNAL_ERROR,
+        );
+        setResultFocusToken((token) => token + 1);
         return;
       }
-      setRequestError(
-        dictionary.errors[navigation.code as keyof typeof dictionary.errors] ??
-          dictionary.errors.INTERNAL_ERROR,
-      );
+
+      setActiveHistoryId(resolveChronicleGraphId(navigation.graph) ?? null);
+      setCanvasHref(navigation.href);
+      setCanvasReady(navigation.sessionSaved);
+      if (!navigation.sessionSaved) {
+        setRequestError(dictionary.errors.CHRONICLE_UNAVAILABLE);
+      } else if (
+        !navigation.librarySaved &&
+        navigation.libraryCode === "CHRONICLE_LIBRARY_FULL"
+      ) {
+        setRequestError(dictionary.canvas.libraryFull);
+      }
       setResultFocusToken((token) => token + 1);
     } catch {
       setRequestError(dictionary.errors.network);
@@ -226,8 +252,43 @@ export function GeneratorWorkshop({
     }
   }
 
+  function exploreMap() {
+    if (!canvasReady || !canvasHref) {
+      setRequestError(dictionary.errors.CHRONICLE_UNAVAILABLE);
+      return;
+    }
+    const snapshot = getChronicleSnapshot();
+    const snapshotId = snapshot ? resolveChronicleGraphId(snapshot) : null;
+    if (!snapshot || snapshotId !== activeHistoryId) {
+      setRequestError(dictionary.errors.CHRONICLE_UNAVAILABLE);
+      return;
+    }
+    trackEvent("canvas_opened", {
+      locale,
+      result_count: result?.consequences.length ?? values.count,
+    });
+    router.push(canvasHref);
+  }
+
+  function generateAgain() {
+    trackEvent("result_regenerate", categoricalParams());
+    trackEvent("generator_regenerate", categoricalParams());
+    setResult(null);
+    setCanvasReady(false);
+    setCanvasHref(null);
+    setRequestError(undefined);
+    const field = document.getElementById(
+      "event-description",
+    ) as HTMLTextAreaElement | null;
+    field?.focus();
+  }
+
   function openMap(item: Extract<RecentDeviceItem, { kind: "chronicle" }>) {
     trackEvent("history_opened", {
+      locale,
+      result_count: item.nodeCount,
+    });
+    trackEvent("canvas_opened", {
       locale,
       result_count: item.nodeCount,
     });
@@ -290,7 +351,9 @@ export function GeneratorWorkshop({
           dictionary={dictionary}
           pending={pending}
           resultRef={resultRef}
-          onRegenerate={() => void generate({ regenerate: true })}
+          canvasReady={canvasReady}
+          onExploreMap={exploreMap}
+          onRegenerate={generateAgain}
         />
       }
       history={
@@ -313,6 +376,8 @@ export function GeneratorWorkshop({
             setValues({ ...entry.input, locale: entry.input.locale ?? locale });
             setResult(entry.result);
             setActiveHistoryId(entry.id);
+            setCanvasReady(false);
+            setCanvasHref(null);
             setResultFocusToken((token) => token + 1);
           }}
           onDelete={deleteItem}

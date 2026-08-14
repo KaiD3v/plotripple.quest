@@ -47,7 +47,7 @@
     "timeframeHint": "Longo prazo devolve só consequências de longo prazo. Misto combina imediato, próxima sessão e longo prazo.",
     "countLabel": "Quantidade de consequências",
     "submit": "Gerar consequências",
-    "generating": "Tecendo consequências…",
+    "generating": "Traçando as repercussões desta decisão…",
     "tones": {
       "dark": "Sombrio",
       "heroic": "Heroico",
@@ -91,6 +91,9 @@
     "copied": "Copiado",
     "copyFailed": "Não foi possível copiar. Selecione o texto manualmente.",
     "regenerate": "Gerar novamente",
+    "exploreMap": "Explorar no mapa da crônica",
+    "consequenceCount": "{count} consequências",
+    "ready": "As consequências estão prontas.",
     "timeframes": {
       "immediate": "Imediato",
       "next_session": "Próxima sessão",

@@ -65,13 +65,15 @@ describe("GeneratorResult", () => {
     expect(en).not.toContain("folio-updating");
   });
 
-  it("keeps copy and regenerate actions with the revealed manuscript", () => {
+  it("keeps summary, cards, explore, and regenerate with the revealed manuscript", () => {
     const dictionary = getDictionary("en");
     const html = renderToStaticMarkup(
       <GeneratorResult
         result={result}
         dictionary={dictionary}
         pending={false}
+        canvasReady
+        onExploreMap={() => undefined}
         onRegenerate={() => undefined}
       />,
     );
@@ -79,11 +81,17 @@ describe("GeneratorResult", () => {
     expect(html).toContain(dictionary.result.summaryLabel);
     expect(html).toContain("The spared scout carries the party");
     expect(html).toContain(result.consequences[0]?.title);
+    expect(html).toContain(result.consequences[1]?.title);
+    expect(html).toContain(result.consequences[2]?.title);
+    expect(html).toContain("3 consequences");
     expect(html).toContain(dictionary.result.copy);
+    expect(html).toContain(dictionary.result.exploreMap);
     expect(html).toContain(dictionary.result.regenerate);
+    expect(html).toContain(dictionary.result.ready);
     expect(html).toContain("result-timeline");
     expect(html).toContain('aria-live="polite"');
     expect(html).not.toContain("folio-idle");
+    expect(html).not.toContain(dictionary.result.empty);
   });
 
   it("exposes a busy state while generating", () => {
@@ -99,6 +107,7 @@ describe("GeneratorResult", () => {
 
     expect(html).toContain('aria-busy="true"');
     expect(html).toContain(dictionary.generator.generating);
+    expect(html).toContain("Tracing the ripples of this decision");
     expect(html).toContain("folio-idle");
     expect(html).toContain("ripple-loader");
     expect(html).toContain('aria-live="polite"');
@@ -111,6 +120,8 @@ describe("GeneratorResult", () => {
         result={result}
         dictionary={dictionary}
         pending
+        canvasReady
+        onExploreMap={() => undefined}
         onRegenerate={() => undefined}
       />,
     );

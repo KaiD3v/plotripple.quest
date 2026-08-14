@@ -47,7 +47,7 @@
     "timeframeHint": "Long term returns only long-term ripples. Mixed spreads immediate, next-session, and long-term.",
     "countLabel": "How many consequences",
     "submit": "Generate consequences",
-    "generating": "Weaving consequences…",
+    "generating": "Tracing the ripples of this decision…",
     "tones": {
       "dark": "Dark",
       "heroic": "Heroic",
@@ -91,6 +91,9 @@
     "copied": "Copied",
     "copyFailed": "Could not copy. Select the text instead.",
     "regenerate": "Generate again",
+    "exploreMap": "Explore in the chronicle map",
+    "consequenceCount": "{count} consequences",
+    "ready": "Consequences are ready.",
     "timeframes": {
       "immediate": "Immediate",
       "next_session": "Next session",

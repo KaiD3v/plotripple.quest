@@ -231,14 +231,12 @@ const expandResult = {
 };
 
 describe("generate to canvas flow", () => {
-  it("generates, navigates to /en/canvas, and shows the chronicle title", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => ({
-        ok: true,
-        json: async () => result,
-      })),
-    );
+  it("generates, stays on home, then opens canvas from the explore action", async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      json: async () => result,
+    }));
+    vi.stubGlobal("fetch", fetchMock);
 
     const host = document.createElement("div");
     document.body.appendChild(host);
@@ -268,12 +266,34 @@ describe("generate to canvas flow", () => {
       await Promise.resolve();
     });
 
-    expect(push).toHaveBeenCalledWith("/en/canvas");
+    expect(push).not.toHaveBeenCalled();
+    expect(host.textContent).toContain(result.summary);
+    expect(host.textContent).toContain("A whispered debt");
+    expect(host.textContent).toContain(dictionary.result.exploreMap);
+    expect(host.textContent).not.toContain(dictionary.result.empty);
     expect(sessionStorage.getItem(CHRONICLE_STORAGE_KEY)).toContain(
       result.summary,
     );
     expect(localStorage.getItem(CHRONICLE_LIBRARY_STORAGE_KEY)).toContain(
       result.summary,
+    );
+    const libraryBeforeExplore = localStorage.getItem(
+      CHRONICLE_LIBRARY_STORAGE_KEY,
+    );
+
+    const explore = Array.from(host.querySelectorAll("button")).find(
+      (button) => button.textContent?.includes(dictionary.result.exploreMap),
+    );
+    expect(explore).toBeTruthy();
+    await act(async () => {
+      explore?.click();
+    });
+
+    expect(push).toHaveBeenCalledWith("/en/canvas");
+    expect(push).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(CHRONICLE_LIBRARY_STORAGE_KEY)).toBe(
+      libraryBeforeExplore,
     );
 
     await act(async () => {
@@ -334,6 +354,14 @@ describe("generate to canvas flow", () => {
         new Event("submit", { bubbles: true, cancelable: true }),
       );
       await Promise.resolve();
+    });
+    expect(push).not.toHaveBeenCalled();
+
+    const explore = Array.from(host.querySelectorAll("button")).find(
+      (button) => button.textContent?.includes(dictionary.result.exploreMap),
+    );
+    await act(async () => {
+      explore?.click();
     });
     expect(push).toHaveBeenCalledWith("/en/canvas");
 

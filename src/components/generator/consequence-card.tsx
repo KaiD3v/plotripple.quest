@@ -9,6 +9,9 @@ export function ConsequenceCard({
   consequence: Consequence;
   dictionary: Dictionary;
 }) {
+  const parties = consequence.affectedParties ?? [];
+  const trigger = consequence.trigger?.trim();
+
   return (
     <article className="consequence-entry">
       <TimeframeMark timeframe={consequence.timeframe} />
@@ -22,14 +25,18 @@ export function ConsequenceCard({
       <p className="folio-prose mt-2 break-words font-reading text-[1.02rem] leading-relaxed">
         {consequence.description}
       </p>
-      <p className="mt-4 text-[0.9375rem] leading-relaxed text-parchment-ink">
-        <span className="font-semibold">{dictionary.result.triggerLabel}: </span>
-        {consequence.trigger}
-      </p>
-      <p className="mt-2 text-[0.9375rem] leading-relaxed text-parchment-ink">
-        <span className="font-semibold">{dictionary.result.affectedLabel}: </span>
-        {consequence.affectedParties.join(", ")}
-      </p>
+      {trigger ? (
+        <p className="mt-4 text-[0.9375rem] leading-relaxed text-parchment-ink">
+          <span className="font-semibold">{dictionary.result.triggerLabel}: </span>
+          {trigger}
+        </p>
+      ) : null}
+      {parties.length > 0 ? (
+        <p className="mt-2 text-[0.9375rem] leading-relaxed text-parchment-ink">
+          <span className="font-semibold">{dictionary.result.affectedLabel}: </span>
+          {parties.join(", ")}
+        </p>
+      ) : null}
     </article>
   );
 }
