@@ -15,7 +15,16 @@ export function prefersReducedMotion(
   return Boolean(media?.matches);
 }
 
-export function bringResultIntoView(element: HTMLElement | null): void {
+export function isMobileResultViewport(
+  media: Pick<MediaQueryList, "matches"> | null | undefined,
+): boolean {
+  return Boolean(media?.matches);
+}
+
+export function bringResultIntoView(
+  element: HTMLElement | null,
+  options?: { focus?: boolean },
+): void {
   if (!element || typeof window === "undefined") {
     return;
   }
@@ -27,14 +36,25 @@ export function bringResultIntoView(element: HTMLElement | null): void {
       : null,
   );
 
-  if (shouldScrollToResult(rect, window.innerHeight)) {
+  if (
+    shouldScrollToResult(rect, window.innerHeight) &&
+    typeof element.scrollIntoView === "function"
+  ) {
     element.scrollIntoView({
       behavior: reduceMotion ? "auto" : "smooth",
       block: "start",
     });
   }
 
-  if (typeof element.focus === "function") {
+  const shouldFocus =
+    options?.focus ??
+    isMobileResultViewport(
+      typeof window.matchMedia === "function"
+        ? window.matchMedia("(max-width: 1023px)")
+        : null,
+    );
+
+  if (shouldFocus && typeof element.focus === "function") {
     element.focus({ preventScroll: true });
   }
 }

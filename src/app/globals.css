@@ -253,6 +253,13 @@ h3,
   animation: folio-reveal 180ms ease-out;
 }
 
+@media (min-width: 1024px) {
+  .folio-reveal {
+    max-height: min(72vh, 52rem);
+    overflow-y: auto;
+  }
+}
+
 .folio-idle {
   display: flex;
   min-height: 18rem;

@@ -48,11 +48,15 @@ describe("bringResultIntoView", () => {
     };
   }
 
-  it("scrolls to start and focuses without extra browser scroll", () => {
+  it("scrolls to start and focuses on mobile without extra browser scroll", () => {
     const element = mockElement(-100);
     vi.stubGlobal("window", {
       innerHeight: 844,
-      matchMedia: () => ({ matches: false }),
+      matchMedia: (query: string) => ({
+        matches: query.includes("prefers-reduced-motion")
+          ? false
+          : query.includes("max-width: 1023px"),
+      }),
     });
 
     bringResultIntoView(element as unknown as HTMLElement);
@@ -68,7 +72,7 @@ describe("bringResultIntoView", () => {
     const element = mockElement(90);
     vi.stubGlobal("window", {
       innerHeight: 844,
-      matchMedia: () => ({ matches: false }),
+      matchMedia: () => ({ matches: true }),
     });
 
     bringResultIntoView(element as unknown as HTMLElement);
@@ -81,7 +85,9 @@ describe("bringResultIntoView", () => {
     const element = mockElement(-80);
     vi.stubGlobal("window", {
       innerHeight: 844,
-      matchMedia: () => ({ matches: true }),
+      matchMedia: (query: string) => ({
+        matches: query.includes("prefers-reduced-motion"),
+      }),
     });
 
     bringResultIntoView(element as unknown as HTMLElement);
@@ -90,5 +96,18 @@ describe("bringResultIntoView", () => {
       behavior: "auto",
       block: "start",
     });
+  });
+
+  it("does not move focus on desktop after generation", () => {
+    const element = mockElement(-100);
+    vi.stubGlobal("window", {
+      innerHeight: 844,
+      matchMedia: () => ({ matches: false }),
+    });
+
+    bringResultIntoView(element as unknown as HTMLElement);
+
+    expect(element.scrollIntoView).toHaveBeenCalled();
+    expect(element.focus).not.toHaveBeenCalled();
   });
 });
