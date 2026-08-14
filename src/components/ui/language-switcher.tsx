@@ -228,7 +228,6 @@ export function LanguageSwitcher({
               onClick={() => {
                 setOpen(false);
                 if (!active) {
-                  trackEvent("language_change", { language: item, locale: item });
                   trackEvent("language_changed", { language: item, locale: item });
                 }
               }}

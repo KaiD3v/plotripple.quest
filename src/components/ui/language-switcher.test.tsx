@@ -196,6 +196,31 @@ describe("LanguageSwitcher", () => {
     await unmount(root, host);
   });
 
+  it("emits language_changed once when switching locale", async () => {
+    const gtag = vi.fn();
+    window.gtag = gtag;
+    const { host, root } = await mountSwitcher("fixture=25");
+    const user = userEvent.setup();
+
+    await user.click(triggerOf(host)!);
+    await user.click(
+      host.querySelector<HTMLAnchorElement>(
+        'a[href="/pt-br/canvas/demo?fixture=25"]',
+      )!,
+    );
+
+    expect(gtag).toHaveBeenCalledTimes(1);
+    expect(gtag).toHaveBeenCalledWith("event", "language_changed", {
+      language: "pt-br",
+      locale: "pt-br",
+    });
+    expect(
+      gtag.mock.calls.some((call) => call[1] === "language_change"),
+    ).toBe(false);
+
+    await unmount(root, host);
+  });
+
   it("opens from the keyboard and moves between options", async () => {
     const { host, root } = await mountSwitcher();
     const user = userEvent.setup();
