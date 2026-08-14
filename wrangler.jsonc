@@ -20,12 +20,13 @@
   "images": {
     "binding": "IMAGES"
   },
-  // Create a KV namespace, then replace the placeholder and uncomment:
-  // npx wrangler kv namespace create RATE_LIMIT_KV
-  // "kv_namespaces": [
-  //   {
-  //     "binding": "RATE_LIMIT_KV",
-  //     "id": "REPLACE_WITH_RATE_LIMIT_KV_ID"
-  //   }
-  // ]
+  "vars": {
+    "GEMINI_MODEL": "gemini-3.5-flash"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "RATE_LIMIT_KV",
+      "id": "033bc809505a4b4a8ea82753aa5f1cd1"
+    }
+  ]
 }
