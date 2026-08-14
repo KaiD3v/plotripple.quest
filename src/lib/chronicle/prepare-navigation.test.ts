@@ -65,6 +65,7 @@ describe("prepareChronicleNavigation", () => {
       return;
     }
     expect(navigation.href).toBe("/pt-br/canvas");
+    expect(navigation.sessionSaved).toBe(true);
     expect(navigation.librarySaved).toBe(true);
     expect(readChronicleGraph(storage)?.title).toBeTruthy();
     expect(readChronicleGraph(storage)?.id).toBeTruthy();
@@ -97,13 +98,20 @@ describe("prepareChronicleNavigation", () => {
     expect(storage.getItem(CHRONICLE_STORAGE_KEY)).toBeNull();
   });
 
-  it("returns unavailable when storage cannot be written", () => {
+  it("still returns the graph when session storage cannot be written", () => {
     const navigation = prepareChronicleNavigation(
       result,
       "en",
       "The party spared the captured scout.",
       null,
     );
-    expect(navigation).toEqual({ ok: false, code: "CHRONICLE_UNAVAILABLE" });
+    expect(navigation.ok).toBe(true);
+    if (!navigation.ok) {
+      return;
+    }
+    expect(navigation.sessionSaved).toBe(false);
+    expect(navigation.librarySaved).toBe(false);
+    expect(navigation.href).toBe("/en/canvas");
+    expect(navigation.graph.nodes.length).toBeGreaterThan(0);
   });
 });

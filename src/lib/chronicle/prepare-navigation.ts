@@ -14,6 +14,7 @@ export type ChronicleNavigationResult =
       ok: true;
       href: string;
       graph: ChronicleGraph;
+      sessionSaved: boolean;
       librarySaved: boolean;
       libraryCode?: ChronicleErrorCode;
     }
@@ -37,14 +38,10 @@ export function prepareChronicleNavigation(
     return mapped;
   }
 
-  const saved =
+  const sessionSaved =
     storage === undefined
       ? persistChronicle(mapped.graph)
       : writeChronicleGraph(storage, mapped.graph);
-
-  if (!saved) {
-    return { ok: false, code: "CHRONICLE_UNAVAILABLE" };
-  }
 
   const library =
     storage === undefined
@@ -55,6 +52,7 @@ export function prepareChronicleNavigation(
     ok: true,
     href: localizedPath(locale, "/canvas"),
     graph: mapped.graph,
+    sessionSaved,
     librarySaved: library.ok,
     libraryCode: library.ok ? undefined : library.code,
   };
