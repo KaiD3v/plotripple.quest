@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { locales } from "@/i18n/config";
-import { CHRONICLE_MAX_DEPTH } from "@/lib/chronicle/limits";
+import {
+  CHRONICLE_MAX_DEPTH,
+  EXPAND_EXISTING_TITLE_MAX,
+  EXPAND_EXISTING_TITLES_MAX,
+} from "@/lib/chronicle/limits";
 import {
   categories,
   consequenceTimeframes,
@@ -47,7 +51,9 @@ export const expandRippleRequestSchema = z.object({
     affectedParties: z.array(z.string().trim().min(1).max(80)).max(8).optional(),
   }),
   path: z.array(expandRipplePathItemSchema).min(1).max(CHRONICLE_MAX_DEPTH + 1),
-  existingTitles: z.array(z.string().trim().min(1).max(200)).max(24),
+  existingTitles: z
+    .array(z.string().trim().min(1).max(EXPAND_EXISTING_TITLE_MAX))
+    .max(EXPAND_EXISTING_TITLES_MAX),
 });
 
 export type GeneratedFollowUpParsed = z.infer<typeof generatedFollowUpSchema>;
