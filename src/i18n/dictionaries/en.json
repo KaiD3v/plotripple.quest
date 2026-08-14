@@ -296,6 +296,7 @@
     "cannotExpand": "This branch cannot be expanded.",
     "expandUnavailable": "The generation service is temporarily unavailable.",
     "expandInvalidResponse": "The response could not be understood.",
+    "expandPrepareFailed": "This branch could not be prepared for expansion.",
     "libraryUnsaved": "This chronicle is available in this tab, but it could not be saved on this device.",
     "libraryUnavailable": "This browser could not keep a local chronicle library. Check private browsing settings.",
     "libraryFull": "This device has reached the local chronicle limit. Delete one from Recent on this device to save another."

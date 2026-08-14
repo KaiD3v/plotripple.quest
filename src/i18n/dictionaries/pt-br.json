@@ -296,6 +296,7 @@
     "cannotExpand": "Este ramo não pode ser expandido.",
     "expandUnavailable": "O serviço de geração está temporariamente indisponível.",
     "expandInvalidResponse": "A resposta não pôde ser compreendida.",
+    "expandPrepareFailed": "Esta ramificação não pôde ser preparada para expansão.",
     "libraryUnsaved": "Esta crônica continua disponível nesta aba, mas não pôde ser salva neste dispositivo.",
     "libraryUnavailable": "Este navegador não conseguiu manter uma biblioteca local de crônicas. Verifique o modo privado.",
     "libraryFull": "Este dispositivo atingiu o limite local de crônicas. Exclua uma em Recentes neste dispositivo para salvar outra."

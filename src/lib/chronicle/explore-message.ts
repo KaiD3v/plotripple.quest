@@ -32,6 +32,8 @@ export function exploreRippleMessage(
       return dictionary.canvas.statusUneditable;
     case "CHRONICLE_UNAVAILABLE":
       return dictionary.errors.CHRONICLE_UNAVAILABLE;
+    case "VALIDATION_ERROR":
+      return dictionary.canvas.expandPrepareFailed;
     case "network":
       return dictionary.errors.network;
     default:
