@@ -92,26 +92,3 @@ export function trackEvent(
 
   window.gtag("event", event, allowedParams(params));
 }
-
-export function grantAnalyticsConsent(): void {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") {
-    return;
-  }
-
-  window.gtag("consent", "update", {
-    analytics_storage: "granted",
-  });
-}
-
-export function denyAnalyticsConsent(): void {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") {
-    return;
-  }
-
-  window.gtag("consent", "update", {
-    analytics_storage: "denied",
-    ad_storage: "denied",
-    ad_user_data: "denied",
-    ad_personalization: "denied",
-  });
-}

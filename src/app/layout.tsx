@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Figtree, Fraunces } from "next/font/google";
 import { headers } from "next/headers";
-import { AnalyticsLoader } from "@/components/ads/analytics-loader";
+import { GoogleTagLoaders } from "@/components/ads/google-tag-loaders";
 import { localeHtmlLang } from "@/i18n/config";
 import { BRAND_ASSETS } from "@/lib/brand";
-import { getGaMeasurementId, getSiteUrl } from "@/lib/env";
+import { getAdSenseClientId, getGaMeasurementId, getSiteUrl } from "@/lib/env";
+import { DISABLE_GOOGLE_TAGS_HEADER } from "@/lib/google-tags-route";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -40,6 +41,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const headerList = await headers();
   const lang = headerList.get("x-html-lang") || localeHtmlLang.en;
   const measurementId = getGaMeasurementId();
+  const adsenseClientId = getAdSenseClientId();
+  const disableGoogleTags = headerList.get(DISABLE_GOOGLE_TAGS_HEADER) === "1";
 
   return (
     <html
@@ -48,9 +51,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col bg-deep text-bone">
         {children}
-        {measurementId ? (
-          <AnalyticsLoader measurementId={measurementId} />
-        ) : null}
+        <GoogleTagLoaders
+          disabled={disableGoogleTags}
+          measurementId={measurementId}
+          adsenseClientId={adsenseClientId}
+        />
       </body>
     </html>
   );
