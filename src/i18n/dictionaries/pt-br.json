@@ -5,7 +5,7 @@
     "aboutTitle": "Sobre a PlotRipple",
     "aboutDescription": "A PlotRipple é um portal internacional de ferramentas gratuitas para mestres de RPG de mesa. Veja o que o gerador de consequências faz e o que vem a seguir.",
     "privacyTitle": "Privacidade — PlotRipple",
-    "privacyDescription": "Como a PlotRipple trata o texto enviado, a geração com Gemini, as crônicas locais, limite de uso, analytics e publicidade futura. Esta página é um rascunho inicial.",
+    "privacyDescription": "Como a PlotRipple trata o texto enviado, a geração com Gemini, as crônicas locais, limite de uso, analytics e publicidade. Esta página é um rascunho inicial.",
     "termsTitle": "Termos de uso — PlotRipple",
     "termsDescription": "Termos iniciais para o uso das ferramentas narrativas gratuitas da PlotRipple. Esta página é um rascunho e não substitui revisão jurídica."
   },
@@ -201,7 +201,7 @@
       },
       {
         "title": "Analytics e anúncios",
-        "body": "Analytics e publicidade poderão ser configurados no futuro. Se forem ativados, não incluirão o texto digitado nem o texto gerado da história."
+        "body": "A PlotRipple pode carregar o Google Analytics 4 e o Google AdSense. Essas tags começam com o Consent Mode v2 do Google definido como negado para armazenamento de analytics, anúncios, dados de usuário de anúncios e personalização de anúncios. A PlotRipple não concede esse consentimento no próprio código. Quando a plataforma de gestão de consentimento (CMP) certificada do Google estiver publicada para este site em AdSense Privacy & messaging, essa mensagem permite consentir, recusar e gerenciar opções de analytics e publicidade. Se você permitir, as tecnologias do Google podem usar cookies ou armazenamento local. Você pode revisar ou alterar essa escolha depois pelo link “Privacy and cookie settings” fornecido pela CMP. O texto narrativo que você escreve e o texto gerado da história não são enviados ao Analytics nem ao AdSense. Esta descrição não é uma garantia de conformidade jurídica."
       }
     ]
   },

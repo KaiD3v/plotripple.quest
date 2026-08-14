@@ -5,7 +5,7 @@
     "aboutTitle": "About PlotRipple",
     "aboutDescription": "PlotRipple is a free international portal of tools for tabletop RPG game masters. Learn what the consequence generator does and what comes next.",
     "privacyTitle": "Privacy — PlotRipple",
-    "privacyDescription": "How PlotRipple handles the text you submit, Gemini generation, local chronicles, rate limiting, analytics, and future advertising. This page is an initial draft.",
+    "privacyDescription": "How PlotRipple handles the text you submit, Gemini generation, local chronicles, rate limiting, analytics, and advertising. This page is an initial draft.",
     "termsTitle": "Terms of Use — PlotRipple",
     "termsDescription": "Initial terms for using PlotRipple’s free narrative tools. This page is a draft and not legal advice."
   },
@@ -201,7 +201,7 @@
       },
       {
         "title": "Analytics and ads",
-        "body": "Analytics and advertising may be configured later. If they are enabled, they will not include the text you typed or the generated story text."
+        "body": "PlotRipple may load Google Analytics 4 and Google AdSense. Those tags start with Google Consent Mode v2 set to denied for analytics storage, ad storage, ad user data, and ad personalization. PlotRipple does not grant that consent in its own code. When Google’s certified consent management platform (CMP) is published for this site in AdSense Privacy & messaging, that message can ask you to consent, refuse, or manage options for analytics and advertising. If you allow it, Google’s technologies may use cookies or local storage. You can review or change that choice later through the “Privacy and cookie settings” link provided by the CMP. The narrative text you type and the generated story text are not sent to Analytics or AdSense. This description is not a legal compliance guarantee."
       }
     ]
   },
