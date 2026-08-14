@@ -5,7 +5,7 @@
     "aboutTitle": "About PlotRipple",
     "aboutDescription": "PlotRipple is a free international portal of tools for tabletop RPG game masters. Learn what the consequence generator does and what comes next.",
     "privacyTitle": "Privacy — PlotRipple",
-    "privacyDescription": "How PlotRipple handles the text you submit, local history, analytics, and future advertising. This page is an initial draft.",
+    "privacyDescription": "How PlotRipple handles the text you submit, Gemini generation, local chronicles, analytics, and future advertising. This page is an initial draft.",
     "termsTitle": "Terms of Use — PlotRipple",
     "termsDescription": "Initial terms for using PlotRipple’s free narrative tools. This page is a draft and not legal advice."
   },
@@ -109,10 +109,24 @@
   },
   "history": {
     "title": "Recent on this device",
-    "empty": "No local history yet.",
-    "clear": "Clear history",
-    "open": "Open",
-    "notice": "History stays on this device. It is not sent to the server."
+    "empty": "No local chronicles yet.",
+    "clear": "Clear local chronicles",
+    "open": "Review result",
+    "openMap": "Open map",
+    "delete": "Delete",
+    "deleteNamed": "Delete {title}",
+    "nodeCount": "{count} nodes",
+    "invalidDate": "Unknown date",
+    "notice": "Chronicles stay on this device. Generating or exploring a ripple sends narrative context to our AI provider.",
+    "libraryFull": "This device has reached the local chronicle limit. Delete one to save another.",
+    "deleteConfirmTitle": "Delete this chronicle?",
+    "deleteConfirmBody": "“{title}” will be removed from this device.",
+    "deleteConfirm": "Delete",
+    "deleteCancel": "Cancel",
+    "clearConfirmTitle": "Clear local chronicles?",
+    "clearConfirmBody": "This removes PlotRipple chronicles stored in this browser. The map open in this tab can keep working until the tab closes.",
+    "clearConfirm": "Clear local chronicles",
+    "clearCancel": "Cancel"
   },
   "editorial": {
     "title": "How to turn player choices into memorable consequences",
@@ -172,11 +186,11 @@
     "sections": [
       {
         "title": "What you type",
-        "body": "The description you submit is sent to an external AI service so the generator can return consequences. Do not enter personal, confidential, or sensitive information. Treat the field as fiction for the table, not as a place for real names, contact details, or private facts."
+        "body": "When you generate consequences or explore a ripple, the decision and the relevant narrative context are sent to PlotRipple’s backend. The backend uses Google Gemini to produce the text. Do not enter personal, confidential, or sensitive information. Treat the field as fiction for the table, not as a place for real names, contact details, or private facts."
       },
       {
-        "title": "Local history",
-        "body": "The last few generations may be stored in your browser on this device so you can reopen them. That history is not uploaded automatically."
+        "title": "Local chronicles",
+        "body": "Saved chronicles stay in this browser on this device. They are not synced to an account and the library is not sent to our servers. Another device or browser will not see them."
       },
       {
         "title": "Analytics and ads",
@@ -206,6 +220,79 @@
       }
     ]
   },
+  "canvas": {
+    "metaTitle": "Narrative canvas prototype — PlotRipple",
+    "metaDescription": "Experimental prototype of how a decision and its consequences appear on a chronicle map. Fixtures only.",
+    "eyebrow": "Experimental prototype",
+    "title": "Chronicle map",
+    "helper": "A workshop sketch with sample chronicles. Nothing is saved, and the generator is not connected.",
+    "fitChronicle": "Fit chronicle",
+    "centerSelected": "Center selected",
+    "centerOnNode": "Center on node",
+    "resetZoom": "Reset zoom",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "zoomMinReached": "Minimum zoom reached",
+    "zoomMaxReached": "Maximum zoom reached",
+    "centerSelectedDisabled": "Select a node before centering",
+    "hintDesktop": "Select a node to read its chronicle note. Drag the background to explore.",
+    "hintMobile": "Tap a node to read its chronicle note.",
+    "detailsDescription": "Chronicle note for the selected node.",
+    "closeDetails": "Close details",
+    "detailsTitle": "Chronicle note",
+    "decisionLabel": "Decision",
+    "consequenceLabel": "Consequence",
+    "followUpLabel": "Follow-up",
+    "originHint": "Origin",
+    "narrativeStatusLabel": "Narrative status",
+    "statusLabel": "Status",
+    "statuses": {
+      "pending": "Pending",
+      "active": "Active",
+      "resolved": "Resolved",
+      "dismissed": "Dismissed"
+    },
+    "statusMarkedAs": "{title} marked as {status}.",
+    "statusUpdated": "Status updated",
+    "statusUpdateFailed": "The narrative status could not be updated.",
+    "statusUneditable": "This node cannot change narrative status.",
+    "statusSessionOnly": "Status changed in this tab, but it could not be saved on this device.",
+    "selectedAnnouncement": "Selected: {label}",
+    "outlineTitle": "Text outline",
+    "outlineSummary": "Open a navigable list of this chronicle",
+    "fixtureLabel": "Dev fixture",
+    "fixtures": {
+      "3": "3 consequences",
+      "5": "5 consequences",
+      "10": "~10 nodes, branched",
+      "25": "~25 nodes",
+      "long-pt": "Long Portuguese text"
+    },
+    "unknownFixture": "Unknown fixture. Showing the three-consequence sketch.",
+    "productionMetaTitle": "Chronicle map — PlotRipple",
+    "productionMetaDescription": "Read a generated decision and its consequences as a chronicle map. Kept on this device.",
+    "productionEyebrow": "Chronicle desk",
+    "productionTitle": "Chronicle map",
+    "productionHelper": "This chronicle is stored only on this device. When you generate or explore a ripple, the relevant narrative context is sent to our AI provider.",
+    "emptyEyebrow": "Unstamped blotter",
+    "emptyTitle": "No chronicle on this desk",
+    "emptyBody": "Generate a decision, or open a saved chronicle from Recent on this device.",
+    "emptyAction": "Record a decision",
+    "loading": "Unrolling the blotter…",
+    "exploreRipple": "Explore this ripple",
+    "exploringRipple": "Exploring…",
+    "branchExplored": "Branch explored",
+    "followUpsAdded": "{count} follow-ups added to {title}.",
+    "tryAgain": "Try again",
+    "maxDepthReached": "Maximum depth reached.",
+    "nodeLimitReached": "Chronicle node limit reached.",
+    "cannotExpand": "This branch cannot be expanded.",
+    "expandUnavailable": "The generation service is temporarily unavailable.",
+    "expandInvalidResponse": "The response could not be understood.",
+    "libraryUnsaved": "This chronicle is available in this tab, but it could not be saved on this device.",
+    "libraryUnavailable": "This browser could not keep a local chronicle library. Check private browsing settings.",
+    "libraryFull": "This device has reached the local chronicle limit. Delete one from Recent on this device to save another."
+  },
   "footer": {
     "rights": "A narrative workshop for game masters.",
     "independent": "Independent of published RPG systems."
@@ -217,6 +304,12 @@
     "AI_UNAVAILABLE": "The generator is unavailable right now. Try again in a moment.",
     "INVALID_AI_RESPONSE": "The generator returned an unusable result. Try again with a clearer description.",
     "INTERNAL_ERROR": "Something went wrong. Try again shortly.",
-    "network": "Could not reach the generator. Check your connection and try again."
+    "network": "Could not reach the generator. Check your connection and try again.",
+    "CHRONICLE_EMPTY": "The generator did not return enough to draw a chronicle. Try again with a clearer decision.",
+    "CHRONICLE_INVALID": "The chronicle could not be read. Generate the consequences again.",
+    "CHRONICLE_UNAVAILABLE": "This device could not keep the chronicle for the map. Check private browsing settings and try again.",
+    "CHRONICLE_LIBRARY_UNAVAILABLE": "This browser could not keep a local chronicle library. Check private browsing settings.",
+    "CHRONICLE_LIBRARY_FULL": "This device has reached the local chronicle limit. Delete one to save another.",
+    "CHRONICLE_NOT_FOUND": "That chronicle is not on this device."
   }
 }

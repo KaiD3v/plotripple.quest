@@ -5,7 +5,7 @@
     "aboutTitle": "Sobre a PlotRipple",
     "aboutDescription": "A PlotRipple é um portal internacional de ferramentas gratuitas para mestres de RPG de mesa. Veja o que o gerador de consequências faz e o que vem a seguir.",
     "privacyTitle": "Privacidade — PlotRipple",
-    "privacyDescription": "Como a PlotRipple trata o texto enviado, o histórico local, analytics e publicidade futura. Esta página é um rascunho inicial.",
+    "privacyDescription": "Como a PlotRipple trata o texto enviado, a geração com Gemini, as crônicas locais, analytics e publicidade futura. Esta página é um rascunho inicial.",
     "termsTitle": "Termos de uso — PlotRipple",
     "termsDescription": "Termos iniciais para o uso das ferramentas narrativas gratuitas da PlotRipple. Esta página é um rascunho e não substitui revisão jurídica."
   },
@@ -109,10 +109,24 @@
   },
   "history": {
     "title": "Recentes neste dispositivo",
-    "empty": "Ainda não há histórico local.",
-    "clear": "Limpar histórico",
-    "open": "Abrir",
-    "notice": "O histórico fica só neste dispositivo. Ele não é enviado ao servidor."
+    "empty": "Ainda não há crônicas locais.",
+    "clear": "Limpar crônicas locais",
+    "open": "Rever resultado",
+    "openMap": "Abrir mapa",
+    "delete": "Excluir",
+    "deleteNamed": "Excluir {title}",
+    "nodeCount": "{count} nós",
+    "invalidDate": "Data desconhecida",
+    "notice": "As crônicas ficam neste dispositivo. Gerar ou explorar uma consequência envia o contexto narrativo ao nosso provedor de IA.",
+    "libraryFull": "Este dispositivo atingiu o limite local de crônicas. Exclua uma para salvar outra.",
+    "deleteConfirmTitle": "Excluir esta crônica?",
+    "deleteConfirmBody": "“{title}” será removida deste dispositivo.",
+    "deleteConfirm": "Excluir",
+    "deleteCancel": "Cancelar",
+    "clearConfirmTitle": "Limpar crônicas locais?",
+    "clearConfirmBody": "Isso remove as crônicas da PlotRipple guardadas neste navegador. O mapa aberto nesta aba pode continuar até a aba fechar.",
+    "clearConfirm": "Limpar crônicas locais",
+    "clearCancel": "Cancelar"
   },
   "editorial": {
     "title": "Como transformar escolhas em consequências memoráveis",
@@ -172,11 +186,11 @@
     "sections": [
       {
         "title": "O que você escreve",
-        "body": "A descrição enviada é processada por um serviço externo de IA para devolver consequências. Não insira informações pessoais, confidenciais ou sensíveis. Trate o campo como ficção da mesa, não como lugar para nomes reais, contatos ou fatos privados."
+        "body": "Ao gerar consequências ou explorar um desdobramento, a decisão e o contexto narrativo necessário são enviados ao backend da PlotRipple. O backend usa o Google Gemini para produzir o texto. Não insira informações pessoais, confidenciais ou sensíveis. Trate o campo como ficção da mesa, não como lugar para nomes reais, contatos ou fatos privados."
       },
       {
-        "title": "Histórico local",
-        "body": "As últimas gerações podem ser armazenadas no navegador deste dispositivo para você reabri-las. Esse histórico não é enviado automaticamente."
+        "title": "Crônicas locais",
+        "body": "As crônicas salvas ficam neste navegador, neste dispositivo. Elas não são sincronizadas com uma conta e a biblioteca não é enviada aos nossos servidores. Outro dispositivo ou navegador não as verá."
       },
       {
         "title": "Analytics e anúncios",
@@ -206,6 +220,79 @@
       }
     ]
   },
+  "canvas": {
+    "metaTitle": "Protótipo do canvas narrativo — PlotRipple",
+    "metaDescription": "Protótipo experimental de como uma decisão e suas consequências aparecem num mapa-crônica. Apenas fixtures.",
+    "eyebrow": "Protótipo experimental",
+    "title": "Mapa-crônica",
+    "helper": "Um rascunho de oficina com crônicas de exemplo. Nada é salvo, e o gerador não está ligado.",
+    "fitChronicle": "Ajustar crônica",
+    "centerSelected": "Centralizar seleção",
+    "centerOnNode": "Centralizar no nó",
+    "resetZoom": "Redefinir zoom",
+    "zoomIn": "Ampliar",
+    "zoomOut": "Reduzir",
+    "zoomMinReached": "Zoom mínimo atingido",
+    "zoomMaxReached": "Zoom máximo atingido",
+    "centerSelectedDisabled": "Selecione um nó antes de centralizar",
+    "hintDesktop": "Selecione um nó para ler sua nota. Arraste o fundo para explorar.",
+    "hintMobile": "Toque em um nó para ler sua nota.",
+    "detailsDescription": "Nota da crônica do nó selecionado.",
+    "closeDetails": "Fechar detalhes",
+    "detailsTitle": "Nota da crônica",
+    "decisionLabel": "Decisão",
+    "consequenceLabel": "Consequência",
+    "followUpLabel": "Desdobramento",
+    "originHint": "Origem",
+    "narrativeStatusLabel": "Estado narrativo",
+    "statusLabel": "Estado",
+    "statuses": {
+      "pending": "Pendente",
+      "active": "Ativa",
+      "resolved": "Resolvida",
+      "dismissed": "Descartada"
+    },
+    "statusMarkedAs": "{title} marcada como {status}.",
+    "statusUpdated": "Estado atualizado",
+    "statusUpdateFailed": "Não foi possível atualizar o estado narrativo.",
+    "statusUneditable": "Este nó não pode mudar o estado narrativo.",
+    "statusSessionOnly": "Estado alterado nesta aba, mas não pôde ser salvo neste dispositivo.",
+    "selectedAnnouncement": "Selecionado: {label}",
+    "outlineTitle": "Índice textual",
+    "outlineSummary": "Abrir uma lista navegável desta crônica",
+    "fixtureLabel": "Fixture de dev",
+    "fixtures": {
+      "3": "3 consequências",
+      "5": "5 consequências",
+      "10": "~10 nós, ramificado",
+      "25": "~25 nós",
+      "long-pt": "Texto longo em português"
+    },
+    "unknownFixture": "Fixture desconhecida. Mostrando o rascunho de três consequências.",
+    "productionMetaTitle": "Mapa-crônica — PlotRipple",
+    "productionMetaDescription": "Leia uma decisão gerada e suas consequências num mapa-crônica. Guardado neste dispositivo.",
+    "productionEyebrow": "Mesa da crônica",
+    "productionTitle": "Mapa-crônica",
+    "productionHelper": "Esta crônica é armazenada apenas neste dispositivo. Ao gerar ou explorar uma consequência, o contexto narrativo necessário é enviado ao nosso provedor de IA.",
+    "emptyEyebrow": "Bloco sem carimbo",
+    "emptyTitle": "Não há crônica nesta mesa",
+    "emptyBody": "Gere uma decisão ou abra uma crônica salva em Recentes neste dispositivo.",
+    "emptyAction": "Registrar uma decisão",
+    "loading": "Desenrolando o bloco…",
+    "exploreRipple": "Explorar esta consequência",
+    "exploringRipple": "Explorando…",
+    "branchExplored": "Ramo já explorado",
+    "followUpsAdded": "{count} desdobramentos adicionados a {title}.",
+    "tryAgain": "Tentar de novo",
+    "maxDepthReached": "Profundidade máxima atingida.",
+    "nodeLimitReached": "Limite de nós da crônica atingido.",
+    "cannotExpand": "Este ramo não pode ser expandido.",
+    "expandUnavailable": "O serviço de geração está temporariamente indisponível.",
+    "expandInvalidResponse": "A resposta não pôde ser compreendida.",
+    "libraryUnsaved": "Esta crônica continua disponível nesta aba, mas não pôde ser salva neste dispositivo.",
+    "libraryUnavailable": "Este navegador não conseguiu manter uma biblioteca local de crônicas. Verifique o modo privado.",
+    "libraryFull": "Este dispositivo atingiu o limite local de crônicas. Exclua uma em Recentes neste dispositivo para salvar outra."
+  },
   "footer": {
     "rights": "Uma oficina narrativa para mestres.",
     "independent": "Independente de sistemas de RPG publicados."
@@ -217,6 +304,12 @@
     "AI_UNAVAILABLE": "O gerador está indisponível no momento. Tente de novo em instantes.",
     "INVALID_AI_RESPONSE": "O gerador devolveu um resultado inutilizável. Tente de novo com uma descrição mais clara.",
     "INTERNAL_ERROR": "Algo deu errado. Tente novamente em breve.",
-    "network": "Não foi possível alcançar o gerador. Verifique a conexão e tente de novo."
+    "network": "Não foi possível alcançar o gerador. Verifique a conexão e tente de novo.",
+    "CHRONICLE_EMPTY": "O gerador não devolveu o suficiente para desenhar uma crônica. Tente de novo com uma decisão mais clara.",
+    "CHRONICLE_INVALID": "A crônica não pôde ser lida. Gere as consequências outra vez.",
+    "CHRONICLE_UNAVAILABLE": "Este dispositivo não conseguiu guardar a crônica para o mapa. Verifique o modo privado e tente de novo.",
+    "CHRONICLE_LIBRARY_UNAVAILABLE": "Este navegador não conseguiu manter uma biblioteca local de crônicas. Verifique o modo privado.",
+    "CHRONICLE_LIBRARY_FULL": "Este dispositivo atingiu o limite local de crônicas. Exclua uma para salvar outra.",
+    "CHRONICLE_NOT_FOUND": "Essa crônica não está neste dispositivo."
   }
 }
