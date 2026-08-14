@@ -103,6 +103,63 @@ Until Upstash and `RATE_LIMIT_SECRET` exist:
 - [ ] `RATE_LIMIT_SECRET` set on Vercel
 - [ ] `NEXT_PUBLIC_SITE_URL=https://plotripple.vercel.app` (or your custom domain)
 - [ ] Smoke-test generate and expand; confirm the 21st AI call returns `RATE_LIMITED`
+- [ ] Optional: `NEXT_PUBLIC_GA_MEASUREMENT_ID` and `NEXT_PUBLIC_ADSENSE_CLIENT_ID` on Vercel, then redeploy
+
+## Google AdSense and certified CMP
+
+The app can load the AdSense script and Google Consent Mode defaults. **That code does not publish a consent message by itself.** The Google-certified CMP only appears after you create and publish it in AdSense.
+
+1. Create or activate the AdSense account.
+2. Add the site under **Sites**.
+3. Copy the Publisher ID (`ca-pub-...`).
+4. Set `NEXT_PUBLIC_ADSENSE_CLIENT_ID` in the Vercel project (Production, and Preview if you want ads there).
+5. Redeploy.
+6. In AdSense, open **Privacy & messaging**.
+7. Create a **European regulations** message.
+8. Select this site.
+9. Publish English and Portuguese when the panel supports those languages.
+10. Enable:
+    - Consent mode for advertising purposes
+    - Consent mode for analytics purposes
+11. Keep the choices **Consent**, **Do not consent**, and **Manage options**.
+12. Confirm the automatic **Privacy and cookie settings** link.
+13. Validate Consent Mode with [Google Tag Assistant](https://tagassistant.google.com/).
+
+Until that message is published, tags stay on the Consent Mode defaults below. Do not expect a banner just because `NEXT_PUBLIC_ADSENSE_CLIENT_ID` exists.
+
+`/en/privacy` and `/pt-br/privacy` do not load GA, AdSense, or Funding Choices. The exclusion is applied in `src/proxy.ts` before render. Links that enter or leave those pages use a native `<a href>` so the root layout reloads; switching language while already on Privacy can stay client-side.
+
+### Consent Mode defaults
+
+- EEA, United Kingdom, and Switzerland: `analytics_storage`, `ad_storage`, `ad_user_data`, and `ad_personalization` start as `denied`, with `wait_for_update: 500`.
+- Everywhere else: the same four signals use `NEXT_PUBLIC_CONSENT_DEFAULT_UNREGULATED`, which accepts only `granted` or `denied` and defaults to `denied`.
+- Setting that fallback to `granted` is a legal/product decision, not a technical requirement of this codebase.
+- Only Google’s CMP issues `consent` `update` commands.
+
+### ads.txt
+
+`/ads.txt` is generated from a valid `ca-pub-` + 16-digit Publisher ID:
+
+```
+google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+```
+
+If the ID is missing or invalid, the route returns 404 and does not publish an example record.
+
+### Auto Ads
+
+The app loads `adsbygoogle.js` once when the Publisher ID is valid. That prepares Auto Ads. The labeled slots in the UI are placeholders, not ad units. Enable Auto Ads in the AdSense panel. This codebase does not render manual ad units or call `(adsbygoogle).push()`.
+
+### Content Security Policy
+
+There is no `Content-Security-Policy` allowlist. Google does not support a static origin allowlist for AdSense. Other security headers stay in `next.config.ts`. A strict nonce-based CSP is a future improvement, not part of this cut.
+
+### Checking Consent Mode in Tag Assistant
+
+1. Open Tag Assistant and connect the production (or preview) URL.
+2. Confirm the Consent Mode default fires **before** the Google tags. In EEA/UK/CH the four signals start `denied`. Outside those regions they follow `NEXT_PUBLIC_CONSENT_DEFAULT_UNREGULATED` (default `denied`).
+3. After the published CMP updates consent, confirm an `update` (not a first-party helper) changes those signals.
+4. Confirm there is a single `gtag.js` load and a single `adsbygoogle.js` load.
 
 ## Environment variables
 
@@ -114,7 +171,9 @@ Until Upstash and `RATE_LIMIT_SECRET` exist:
 | `RATE_LIMIT_SECRET` | Production | Used to hash rate-limit identifiers. |
 | `UPSTASH_REDIS_REST_URL` | Production | Upstash Redis REST endpoint. |
 | `UPSTASH_REDIS_REST_TOKEN` | Production | Upstash Redis REST token. |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Optional | Loads gtag with Consent Mode defaults denied. No CMP is included. |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Optional | Loads gtag after Consent Mode defaults. The Google AdSense CMP updates these signals when published. Not loaded on privacy pages. |
+| `NEXT_PUBLIC_ADSENSE_CLIENT_ID` | Optional | Public AdSense Publisher ID (`ca-pub-` + exactly 16 digits). Loads `adsbygoogle.js` once from the root layout and feeds `/ads.txt`. Invalid or empty values are ignored. Not a secret. |
+| `NEXT_PUBLIC_CONSENT_DEFAULT_UNREGULATED` | Optional | Consent Mode default outside the EEA, UK, and Switzerland. Only `granted` or `denied`. Default is `denied`. Using `granted` is a legal/product decision. |
 
 Configure the same names in the Vercel project settings. Never commit real secrets.
 
@@ -123,8 +182,12 @@ Configure the same names in the Vercel project settings. Never commit real secre
 - No accounts, database, or saved campaigns.
 - History is the last 5 generations in `localStorage` on this device.
 - Without Upstash + `RATE_LIMIT_SECRET`, local development skips rate limiting with a warning; production returns a controlled 503 and must not ship that way.
-- Ad slots are labeled placeholders. AdSense is not wired.
-- Analytics events are prepared; the script loads only when a measurement ID exists, with analytics storage denied until a future consent tool grants it.
+- Ad slots are labeled placeholders, not live ad units. Auto Ads must be turned on in the AdSense panel; this repo does not render manual units.
+- The AdSense script loads only when `NEXT_PUBLIC_ADSENSE_CLIENT_ID` is `ca-pub-` plus exactly 16 digits. Build and GA do not depend on it.
+- `/ads.txt` is emitted only for a valid Publisher ID; otherwise it 404s.
+- Analytics events are prepared; gtag loads only when a measurement ID exists. Privacy pages load neither GA nor AdSense.
+- Consent Mode starts denied in the EEA, UK, and Switzerland. The unregulated fallback is denied unless `NEXT_PUBLIC_CONSENT_DEFAULT_UNREGULATED=granted`.
+- The Google CMP does not appear until a Privacy & messaging message is created and published in AdSense.
 - Generated text is a draft for the GM, not rules text for any published system.
 
 ## Out of this MVP
@@ -134,7 +197,8 @@ Configure the same names in the Vercel project settings. Never commit real secre
 - Separate backend
 - LangChain / Vercel AI SDK
 - CMS, Redux, Zustand, React Hook Form, shadcn/ui
-- Real AdSense or a cookie CMP
+- Manual ad units or a first-party cookie banner / homemade CMP
+- A nonce-based Content-Security-Policy
 - Extra generators (rumor, complication, quest) — cards only, no indexable empty pages
 - Automatic locale detection by IP or `Accept-Language`
 - Hosting adapters for non-Vercel runtimes
