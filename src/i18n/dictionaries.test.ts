@@ -43,4 +43,34 @@ describe("dictionaries", () => {
     expect(pt.summaryLabel).toBe("Resumo");
     expect(pt.useExample).toBe("Usar este exemplo");
   });
+
+  it("keeps localized use cases and FAQ in parity", () => {
+    const en = getDictionary("en");
+    const pt = getDictionary("pt-br");
+
+    expect(en.useCases.items).toHaveLength(4);
+    expect(pt.useCases.items).toHaveLength(4);
+    expect(en.faq.items).toHaveLength(5);
+    expect(pt.faq.items).toHaveLength(5);
+    expect(en.useCases.title).toBe(
+      "Built for the decisions that reshape a campaign",
+    );
+    expect(pt.useCases.title).toBe(
+      "Para decisões que transformam uma campanha",
+    );
+    expect(en.faq.items.some((item) => item.answer.includes("{privacy}"))).toBe(
+      true,
+    );
+    expect(pt.faq.items.some((item) => item.answer.includes("{privacy}"))).toBe(
+      true,
+    );
+    expect(en.useCases.items.map((item) => item.id)).toEqual(
+      pt.useCases.items.map((item) => item.id),
+    );
+    expect(en.faq.items.map((item) => item.id)).toEqual(
+      pt.faq.items.map((item) => item.id),
+    );
+    expect(en).not.toHaveProperty("tools");
+    expect(pt).not.toHaveProperty("tools");
+  });
 });

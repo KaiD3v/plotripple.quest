@@ -162,24 +162,60 @@
       }
     ]
   },
-  "tools": {
-    "title": "Mais ferramentas para a mesa",
-    "soon": "Em breve",
+  "useCases": {
+    "title": "Para decisões que transformam uma campanha",
+    "intro": "Quando a mesa sai do caminho preparado, o mestre pode transformar essa escolha em consequências narrativas — e seguir as repercussões no mapa da crônica.",
+    "cta": "Registrar uma decisão",
     "items": [
       {
-        "id": "rumor-generator",
-        "name": "Gerador de Rumores",
-        "blurb": "Sussurros pela metade que as facções já acreditam."
+        "id": "unexpected-decisions",
+        "title": "Quando os jogadores saem do roteiro",
+        "body": "O grupo poupa um inimigo, queima uma ponte ou fecha um acordo que você não preparou. Descreva a escolha e receba consequências imediatas, da próxima sessão e de longo prazo para levar à mesa."
       },
       {
-        "id": "complication-generator",
-        "name": "Gerador de Complicações",
-        "blurb": "Pressão que complica um plano sem encerrá-lo."
+        "id": "npc-factions",
+        "title": "NPCs e facções que se lembram",
+        "body": "Cortes, companhias e templos percebem o que de fato podem ver. A PlotRipple esboça a quem importaria, o que essa gente poderia fazer e como essa pressão chega — sem prender você a um roteiro."
       },
       {
-        "id": "quest-generator",
-        "name": "Gerador de Missões",
-        "blurb": "Trabalhos que nascem de escolhas anteriores, não de um mural aleatório."
+        "id": "later-ripples",
+        "title": "Repercussões que voltam depois",
+        "body": "Algumas consequências cabem na próxima cena. Outras devem esperar uma sessão ou uma temporada. O resultado misto deixa fios para puxar quando a campanha estiver pronta."
+      },
+      {
+        "id": "chronicle-map",
+        "title": "Ver as ramificações e expandi-las",
+        "body": "Depois de gerar, abra o Mapa da crônica. Siga uma repercussão, expanda um ramo e mantenha as bifurcações à vista — guardadas neste dispositivo, prontas para a próxima sessão."
+      }
+    ]
+  },
+  "faq": {
+    "title": "Perguntas frequentes",
+    "items": [
+      {
+        "id": "what-is",
+        "question": "O que é um gerador de consequências para RPG?",
+        "answer": "Um gerador de consequências para RPG ajuda o mestre de RPG de mesa a transformar uma decisão dos jogadores em consequências narrativas estruturadas. Na PlotRipple, você descreve o que aconteceu à mesa e recebe desdobramentos para a próxima cena, a próxima sessão e o longo prazo da campanha."
+      },
+      {
+        "id": "systems",
+        "question": "A PlotRipple funciona com D&D e outros sistemas de RPG?",
+        "answer": "Sim. A PlotRipple é independente de sistema. Mestres usam com Dungeons & Dragons, Pathfinder e outros RPGs de mesa. Ela não inclui nem reproduz regras, monstros ou textos de cenário proprietários desses jogos."
+      },
+      {
+        "id": "saved",
+        "question": "As crônicas geradas ficam salvas?",
+        "answer": "As crônicas ficam neste dispositivo. Não há conta e nada sincroniza na nuvem. Ao gerar consequências ou explorar um desdobramento, o contexto narrativo é enviado ao nosso provedor de IA. {privacy} explica o que sai do navegador."
+      },
+      {
+        "id": "free",
+        "question": "A PlotRipple é gratuita?",
+        "answer": "Sim. A PlotRipple é gratuita, dentro de um limite diário compartilhado para geração e expansão. Não há assinatura."
+      },
+      {
+        "id": "replace-gm",
+        "question": "A PlotRipple substitui o mestre?",
+        "answer": "Não. A PlotRipple oferece pontos de partida. O mestre continua decidindo o que entra na campanha, o que os NPCs realmente fazem e o que a mesa joga."
       }
     ]
   },

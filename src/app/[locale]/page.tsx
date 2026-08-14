@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AdSlot } from "@/components/ads/ad-slot";
-import { ComingSoonTools } from "@/components/generator/coming-soon-tools";
 import { Editorial } from "@/components/generator/editorial";
+import { Faq } from "@/components/generator/faq";
 import { GeneratorWorkshop } from "@/components/generator/generator-workshop";
+import { UseCases, WORKSHOP_ANCHOR_ID } from "@/components/generator/use-cases";
 import { JsonLd } from "@/components/seo/json-ld";
 import { OrnamentDivider } from "@/components/ui/ornament-divider";
 import { RippleOrnament } from "@/components/ui/ripple-ornament";
@@ -60,12 +61,12 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       </section>
       <RippleOrnament className="hero-ornament mt-3 max-h-12 w-full lg:hidden" />
 
-      <div className="mt-7">
+      <section id={WORKSHOP_ANCHOR_ID} className="workshop-anchor mt-7">
         <GeneratorWorkshop
           locale={locale}
           dictionary={dictionary}
         />
-      </div>
+      </section>
 
       <div className="mt-10">
         <AdSlot label={dictionary.ads.label} variant="leaderboard" />
@@ -78,7 +79,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         <AdSlot label={dictionary.ads.label} variant="inline" />
       </div>
 
-      <ComingSoonTools dictionary={dictionary} />
+      <UseCases dictionary={dictionary} />
+      <OrnamentDivider className="mt-12" />
+      <Faq locale={locale} dictionary={dictionary} />
     </div>
   );
 }

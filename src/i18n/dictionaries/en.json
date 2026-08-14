@@ -162,24 +162,60 @@
       }
     ]
   },
-  "tools": {
-    "title": "More tools for the table",
-    "soon": "Coming soon",
+  "useCases": {
+    "title": "Built for the decisions that reshape a campaign",
+    "intro": "When the table leaves the prepared path, a game master can turn that choice into narrative consequences — then follow the ripples on a chronicle map.",
+    "cta": "Record a decision",
     "items": [
       {
-        "id": "rumor-generator",
-        "name": "Rumor Generator",
-        "blurb": "Half-true whispers that factions already believe."
+        "id": "unexpected-decisions",
+        "title": "When players go off-script",
+        "body": "The party spares an enemy, burns a bridge, or strikes a bargain you did not prepare. Describe the choice and receive immediate, next-session, and long-term consequences you can take to the table."
       },
       {
-        "id": "complication-generator",
-        "name": "Complication Generator",
-        "blurb": "Pressure that complicates a plan without shutting it down."
+        "id": "npc-factions",
+        "title": "NPCs and factions that remember",
+        "body": "Courts, crews, and temples notice what they can actually see. PlotRipple sketches who would care, what they might do next, and how that pressure lands — without locking you into a script."
       },
       {
-        "id": "quest-generator",
-        "name": "Quest Generator",
-        "blurb": "Jobs that grow out of earlier choices, not random bulletin boards."
+        "id": "later-ripples",
+        "title": "Ripples that return later",
+        "body": "Some consequences belong in the next scene. Others should wait a session or a season. Mixed results give you threads to pick up when the campaign is ready for them."
+      },
+      {
+        "id": "chronicle-map",
+        "title": "See the branches, then expand them",
+        "body": "After a generation, open the Chronicle Map. Follow a ripple, expand a branch, and keep the story’s forks in view — stored on this device, ready for the next session."
+      }
+    ]
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "items": [
+      {
+        "id": "what-is",
+        "question": "What is an RPG consequence generator?",
+        "answer": "An RPG consequence generator helps a tabletop RPG game master turn a player decision into structured narrative consequences. In PlotRipple, you describe what happened at the table and receive outcomes for the next scene, the next session, and the longer campaign."
+      },
+      {
+        "id": "systems",
+        "question": "Does PlotRipple work with D&D and other RPG systems?",
+        "answer": "Yes. PlotRipple is system-agnostic. Game masters use it with Dungeons & Dragons, Pathfinder, and other tabletop RPGs. It does not include or reproduce proprietary rules, monsters, or setting text from those games."
+      },
+      {
+        "id": "saved",
+        "question": "Are generated chronicles saved?",
+        "answer": "Chronicles stay on this device. There is no account and nothing syncs to the cloud. When you generate consequences or explore a ripple, the narrative context is sent to our AI provider. {privacy} explains what leaves the browser."
+      },
+      {
+        "id": "free",
+        "question": "Is PlotRipple free?",
+        "answer": "Yes. PlotRipple is free, within a shared daily limit for generation and expansion. There is no subscription."
+      },
+      {
+        "id": "replace-gm",
+        "question": "Does PlotRipple replace the game master?",
+        "answer": "No. PlotRipple offers starting points. The game master still decides what enters the campaign, what NPCs actually do, and what the table plays."
       }
     ]
   },
