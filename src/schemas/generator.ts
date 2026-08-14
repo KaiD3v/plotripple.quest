@@ -27,7 +27,6 @@ export const generatorInputSchema = z.object({
   timeframe: z.enum(timeframes),
   count: z.union([z.literal(3), z.literal(5)]),
   locale: z.enum(locales).default("en"),
-  turnstileToken: z.string().max(4096).optional(),
 });
 
 export const generateRequestSchema = generatorInputSchema;
@@ -85,7 +84,7 @@ export const historyEntrySchema = z.object({
   v: z.literal(1),
   id: z.string().min(1).max(80),
   createdAt: z.string().min(1).max(40),
-  input: generatorInputSchema.omit({ turnstileToken: true }),
+  input: generatorInputSchema,
   result: generationResultSchema,
 });
 

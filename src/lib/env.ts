@@ -18,13 +18,6 @@ export function getSiteUrl(env: EnvSource = process.env): string {
   return raw.replace(/\/+$/, "");
 }
 
-export function getPublicTurnstileSiteKey(
-  env: EnvSource = process.env,
-): string | undefined {
-  const value = env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim();
-  return value ? value : undefined;
-}
-
 export function getGaMeasurementId(env: EnvSource = process.env): string | undefined {
   const value = env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim();
   return value ? value : undefined;
@@ -47,11 +40,6 @@ export function getGeminiRuntimeEnv(
     apiKey,
     model: env.GEMINI_MODEL?.trim() || DEFAULT_GEMINI_MODEL,
   };
-}
-
-export function getTurnstileSecret(env: EnvSource = process.env): string | undefined {
-  const value = env.TURNSTILE_SECRET_KEY?.trim();
-  return value ? value : undefined;
 }
 
 export function getRateLimitSecret(env: EnvSource = process.env): string | undefined {

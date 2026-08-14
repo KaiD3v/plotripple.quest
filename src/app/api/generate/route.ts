@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { AppError, logOperationalError, publicErrorBody, toAppError } from "@/lib/errors";
 import { generateConsequences } from "@/lib/gemini/generate-consequences";
 import { enforceRateLimit } from "@/lib/rate-limit";
-import { verifyTurnstileIfConfigured } from "@/lib/turnstile";
 import { generateRequestSchema } from "@/schemas/generator";
 
 const MAX_BODY_BYTES = 8_192;
@@ -28,7 +27,6 @@ export async function POST(request: Request): Promise<Response> {
       throw new AppError("VALIDATION_ERROR", 400, { step: "payload" });
     }
 
-    await verifyTurnstileIfConfigured(parsed.data.turnstileToken);
     await enforceRateLimit(request);
 
     const result = await generateConsequences(parsed.data);

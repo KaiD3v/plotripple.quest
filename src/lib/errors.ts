@@ -2,7 +2,6 @@ import type { ApiErrorCode } from "@/types/generator";
 
 const publicMessages: Record<ApiErrorCode, string> = {
   VALIDATION_ERROR: "The request could not be validated.",
-  BOT_VERIFICATION_FAILED: "Verification failed. Please try again.",
   RATE_LIMITED: "Too many requests. Please try again later.",
   AI_UNAVAILABLE: "The generator is temporarily unavailable.",
   INVALID_AI_RESPONSE: "The generator returned an unusable result.",

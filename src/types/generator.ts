@@ -58,7 +58,6 @@ export type GeneratorInput = {
   timeframe: Timeframe;
   count: ResultCount;
   locale?: Locale;
-  turnstileToken?: string;
 };
 
 export type Consequence = {
@@ -77,7 +76,6 @@ export type GenerationResult = {
 
 export const apiErrorCodes = [
   "VALIDATION_ERROR",
-  "BOT_VERIFICATION_FAILED",
   "RATE_LIMITED",
   "AI_UNAVAILABLE",
   "INVALID_AI_RESPONSE",

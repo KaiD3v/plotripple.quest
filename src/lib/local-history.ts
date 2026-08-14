@@ -98,7 +98,7 @@ export function prependHistoryEntry(
 }
 
 export function createHistoryEntry(
-  input: Omit<GeneratorInputParsed, "turnstileToken">,
+  input: GeneratorInputParsed,
   result: GenerationResult,
   now = new Date(),
 ): HistoryEntryParsed {
