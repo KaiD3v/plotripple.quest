@@ -17,7 +17,6 @@ Planned domain: [plotripple.quest](https://plotripple.quest)
 - Vitest
 - Vercel for hosting
 - Upstash Redis REST for rate limiting (`@upstash/redis` + `@upstash/ratelimit`)
-- Cloudflare Turnstile for bot protection (independent of hosting)
 
 ## Install
 
@@ -64,7 +63,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). `/` redirects to `/en`. Portuguese lives at `/pt-br`.
 
-Local development does **not** require Upstash, Turnstile, or analytics. Missing Turnstile and Upstash log a console warning and the generator still runs.
+Local development does **not** require Upstash or analytics. Missing Upstash logs a console warning and the generator still runs.
 
 ## Tests
 
@@ -90,13 +89,6 @@ Until Upstash and `RATE_LIMIT_SECRET` exist:
 - Development: rate limiting is skipped with a warning.
 - Production: generate and expand return a controlled 503. Do not publish without these variables.
 
-## Configure Turnstile
-
-1. Create a widget in the [Cloudflare Turnstile dashboard](https://developers.cloudflare.com/turnstile/).
-2. Set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (public) and `TURNSTILE_SECRET_KEY` (server only).
-3. In development, missing keys skip verification with a console warning.
-4. In production, missing or failed Turnstile verification rejects the request. There is no silent bypass.
-
 ## Deploy on Vercel
 
 1. Import the GitHub repo into [Vercel](https://vercel.com/).
@@ -109,9 +101,7 @@ Until Upstash and `RATE_LIMIT_SECRET` exist:
 - [ ] `GEMINI_API_KEY` and `GEMINI_MODEL` set on Vercel
 - [ ] `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` set on Vercel
 - [ ] `RATE_LIMIT_SECRET` set on Vercel
-- [ ] `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` set on Vercel
 - [ ] `NEXT_PUBLIC_SITE_URL=https://plotripple.vercel.app` (or your custom domain)
-- [ ] Turnstile widget allows the production hostname
 - [ ] Smoke-test generate and expand; confirm the 21st AI call returns `RATE_LIMITED`
 
 ## Environment variables
@@ -121,8 +111,6 @@ Until Upstash and `RATE_LIMIT_SECRET` exist:
 | `NEXT_PUBLIC_SITE_URL` | For canonical URLs | Use `https://plotripple.vercel.app` in production until the custom domain is live. Defaults to `http://localhost:3000` in development. |
 | `GEMINI_API_KEY` | To generate | Server only. Validated when `/api/generate` or `/api/expand` runs, not during static builds. |
 | `GEMINI_MODEL` | Recommended | Falls back to `gemini-3.5-flash` if empty. |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Production | Shows the widget. |
-| `TURNSTILE_SECRET_KEY` | Production | Server verification. |
 | `RATE_LIMIT_SECRET` | Production | Used to hash rate-limit identifiers. |
 | `UPSTASH_REDIS_REST_URL` | Production | Upstash Redis REST endpoint. |
 | `UPSTASH_REDIS_REST_TOKEN` | Production | Upstash Redis REST token. |

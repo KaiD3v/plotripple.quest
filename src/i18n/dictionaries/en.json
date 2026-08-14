@@ -5,7 +5,7 @@
     "aboutTitle": "About PlotRipple",
     "aboutDescription": "PlotRipple is a free international portal of tools for tabletop RPG game masters. Learn what the consequence generator does and what comes next.",
     "privacyTitle": "Privacy — PlotRipple",
-    "privacyDescription": "How PlotRipple handles the text you submit, Gemini generation, local chronicles, rate limiting, bot protection, analytics, and future advertising. This page is an initial draft.",
+    "privacyDescription": "How PlotRipple handles the text you submit, Gemini generation, local chronicles, rate limiting, analytics, and future advertising. This page is an initial draft.",
     "termsTitle": "Terms of Use — PlotRipple",
     "termsDescription": "Initial terms for using PlotRipple’s free narrative tools. This page is a draft and not legal advice."
   },
@@ -196,8 +196,8 @@
         "body": "Saved chronicles stay in this browser on this device. They are not synced to an account and the library is not sent to our servers. Another device or browser will not see them."
       },
       {
-        "title": "Rate limiting and bot protection",
-        "body": "When you generate consequences or expand a ripple, the backend uses your connection’s IP address only to enforce a usage limit. On the server, that IP is turned into a hashed, pseudonymous identifier with a secret. The original IP is not stored in Upstash. Only the hashed, pseudonymous identifier and the counter needed for rate limiting are sent to Upstash Redis, and the counter expires automatically after about 24 hours. Cloudflare Turnstile processes the technical data it needs to check for automated traffic. Narrative text, decisions, consequences, and chronicles are never sent to Upstash."
+        "title": "Rate limiting",
+        "body": "When you generate consequences or expand a ripple, the backend uses your connection’s IP address only to enforce a usage limit. On the server, that IP is turned into a hashed, pseudonymous identifier with a secret. The original IP is not stored in Upstash. Only the hashed, pseudonymous identifier and the counter needed for rate limiting are sent to Upstash Redis, and the counter expires automatically after about 24 hours. Narrative text, decisions, consequences, and chronicles are never sent to Upstash."
       },
       {
         "title": "Analytics and ads",
@@ -306,7 +306,6 @@
   },
   "errors": {
     "VALIDATION_ERROR": "Check the form. Something is missing or outside the allowed options.",
-    "BOT_VERIFICATION_FAILED": "Verification failed. Refresh the page and try again.",
     "RATE_LIMITED": "This connection has reached the current AI operation limit. Try again later.",
     "AI_UNAVAILABLE": "The generator is unavailable right now. Try again in a moment.",
     "INVALID_AI_RESPONSE": "The generator returned an unusable result. Try again with a clearer description.",

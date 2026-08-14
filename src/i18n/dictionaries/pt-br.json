@@ -5,7 +5,7 @@
     "aboutTitle": "Sobre a PlotRipple",
     "aboutDescription": "A PlotRipple é um portal internacional de ferramentas gratuitas para mestres de RPG de mesa. Veja o que o gerador de consequências faz e o que vem a seguir.",
     "privacyTitle": "Privacidade — PlotRipple",
-    "privacyDescription": "Como a PlotRipple trata o texto enviado, a geração com Gemini, as crônicas locais, limite de uso, proteção contra bots, analytics e publicidade futura. Esta página é um rascunho inicial.",
+    "privacyDescription": "Como a PlotRipple trata o texto enviado, a geração com Gemini, as crônicas locais, limite de uso, analytics e publicidade futura. Esta página é um rascunho inicial.",
     "termsTitle": "Termos de uso — PlotRipple",
     "termsDescription": "Termos iniciais para o uso das ferramentas narrativas gratuitas da PlotRipple. Esta página é um rascunho e não substitui revisão jurídica."
   },
@@ -196,8 +196,8 @@
         "body": "As crônicas salvas ficam neste navegador, neste dispositivo. Elas não são sincronizadas com uma conta e a biblioteca não é enviada aos nossos servidores. Outro dispositivo ou navegador não as verá."
       },
       {
-        "title": "Limite de uso e proteção contra bots",
-        "body": "Ao gerar consequências ou expandir um desdobramento, o backend usa o endereço IP da sua conexão apenas para aplicar um limite de uso. No servidor, esse IP vira um identificador pseudonimizado por hash usando um segredo. O IP original não é armazenado no Upstash. Somente o identificador pseudonimizado por hash e o contador necessário ao rate limit são enviados ao Upstash Redis, e o contador expira automaticamente após cerca de 24 horas. O Cloudflare Turnstile processa os dados técnicos necessários para verificar tráfego automatizado. Texto narrativo, decisões, consequências e crônicas nunca são enviados ao Upstash."
+        "title": "Limite de uso",
+        "body": "Ao gerar consequências ou expandir um desdobramento, o backend usa o endereço IP da sua conexão apenas para aplicar um limite de uso. No servidor, esse IP vira um identificador pseudonimizado por hash usando um segredo. O IP original não é armazenado no Upstash. Somente o identificador pseudonimizado por hash e o contador necessário ao rate limit são enviados ao Upstash Redis, e o contador expira automaticamente após cerca de 24 horas. Texto narrativo, decisões, consequências e crônicas nunca são enviados ao Upstash."
       },
       {
         "title": "Analytics e anúncios",
@@ -306,7 +306,6 @@
   },
   "errors": {
     "VALIDATION_ERROR": "Revise o formulário. Falta algo ou há uma opção inválida.",
-    "BOT_VERIFICATION_FAILED": "A verificação falhou. Atualize a página e tente de novo.",
     "RATE_LIMITED": "Esta conexão atingiu o limite atual de operações de IA. Tente mais tarde.",
     "AI_UNAVAILABLE": "O gerador está indisponível no momento. Tente de novo em instantes.",
     "INVALID_AI_RESPONSE": "O gerador devolveu um resultado inutilizável. Tente de novo com uma descrição mais clara.",
