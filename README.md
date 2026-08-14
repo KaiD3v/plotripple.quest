@@ -4,6 +4,8 @@ Free, system-agnostic tools for tabletop RPG game masters. The first product is 
 
 This is an organic-traffic experiment, not a SaaS. There is no account, database, or campaign storage.
 
+Production: [https://plotripple.vercel.app](https://plotripple.vercel.app)
+
 Planned domain: [plotripple.quest](https://plotripple.quest)
 
 ## Stack
@@ -13,7 +15,9 @@ Planned domain: [plotripple.quest](https://plotripple.quest)
 - Zod
 - `@google/genai` on the server
 - Vitest
-- Cloudflare Workers via `@opennextjs/cloudflare` and Wrangler
+- Vercel for hosting
+- Upstash Redis REST for rate limiting (`@upstash/redis` + `@upstash/ratelimit`)
+- Cloudflare Turnstile for bot protection (independent of hosting)
 
 ## Install
 
@@ -50,7 +54,7 @@ Do not prefix Gemini secrets with `NEXT_PUBLIC_`.
 3. Put it in `.env.local` as `GEMINI_API_KEY`.
 4. Set `GEMINI_MODEL` to a current Gemini model you have access to, for example `gemini-3.5-flash`.
 
-The key is read only in the `POST /api/generate` route handler. It is never sent to the browser.
+The key is read only in the `POST /api/generate` and `POST /api/expand` route handlers. It is never sent to the browser.
 
 ## Run locally
 
@@ -60,7 +64,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). `/` redirects to `/en`. Portuguese lives at `/pt-br`.
 
-Local development does **not** require Cloudflare, Turnstile, KV, or analytics. Missing Turnstile and KV log a console warning and the generator still runs.
+Local development does **not** require Upstash, Turnstile, or analytics. Missing Turnstile and Upstash log a console warning and the generator still runs.
 
 ## Tests
 
@@ -69,46 +73,22 @@ npm test
 npm run test:watch
 ```
 
-Tests cover input validation, structured output validation, local history, and prompt construction. They do not call Gemini.
+Tests cover input validation, structured output validation, local history, rate limiting, and prompt construction. They do not call Gemini or Upstash.
 
-## Cloudflare preview
+## Rate limiting (Upstash Redis)
 
-Install Wrangler (already a dev dependency), copy env vars for the Workers runtime, then preview:
+`/api/generate` and `/api/expand` share one bucket: **20 AI operations per hashed IP per 24 hours** (fixed window via `@upstash/ratelimit`).
 
-```bash
-copy .dev.vars.example .dev.vars
-```
+1. Create a Redis database in the [Upstash Console](https://console.upstash.com/).
+2. Copy the REST URL and token into:
+   - `UPSTASH_REDIS_REST_URL`
+   - `UPSTASH_REDIS_REST_TOKEN`
+3. Set `RATE_LIMIT_SECRET` to a long random string. Identifiers are `SHA-256(secret + IP)`. The raw IP is not stored.
 
-Put the same secrets from `.env.local` into `.dev.vars` (Wrangler does not read `.env.local` by itself). Keep `NEXTJS_ENV=development` so OpenNext loads the Next.js development env files when appropriate.
+Until Upstash and `RATE_LIMIT_SECRET` exist:
 
-```bash
-npm run preview
-```
-
-This builds with `opennextjs-cloudflare` and serves the Worker locally. `npm run dev` remains the everyday workflow.
-
-## Create the KV namespace
-
-Rate limiting uses a KV binding named `RATE_LIMIT_KV` (5 generations per hashed identifier per 24 hours).
-
-```bash
-npx wrangler kv namespace create RATE_LIMIT_KV
-```
-
-Copy the returned ID into `wrangler.jsonc`, replacing `REPLACE_WITH_RATE_LIMIT_KV_ID`, and uncomment the `kv_namespaces` block.
-
-Also set `RATE_LIMIT_SECRET` to a long random string. Identifiers are `SHA-256(secret + IP)`. The raw IP is not stored.
-
-Until KV and `RATE_LIMIT_SECRET` exist:
-
-- Local `next dev`: rate limiting is skipped with a warning.
-- Production: generation fails explicitly. Do not ship without the binding.
-
-Refresh TypeScript bindings after wrangler changes:
-
-```bash
-npm run cf-typegen
-```
+- Development: rate limiting is skipped with a warning.
+- Production: generate and expand return a controlled 503. Do not publish without these variables.
 
 ## Configure Turnstile
 
@@ -117,38 +97,44 @@ npm run cf-typegen
 3. In development, missing keys skip verification with a console warning.
 4. In production, missing or failed Turnstile verification rejects the request. There is no silent bypass.
 
-## Deploy later
+## Deploy on Vercel
 
-Do not deploy from this MVP task. When you are ready:
+1. Import the GitHub repo into [Vercel](https://vercel.com/).
+2. Framework preset: Next.js. Build command: `npm run build`.
+3. Set the environment variables listed below for Production (and Preview if you want generation there).
+4. Deploy. Confirm [https://plotripple.vercel.app](https://plotripple.vercel.app) serves `/en` and `/pt-br`.
 
-1. Set production secrets with `npx wrangler secret put GEMINI_API_KEY` (and the other server secrets).
-2. Set public `NEXT_PUBLIC_*` values for the production build.
-3. Attach `RATE_LIMIT_KV`.
-4. Run `npm run deploy` (`opennextjs-cloudflare build && opennextjs-cloudflare deploy`).
+### Production checklist
 
-Placeholder resource IDs in `wrangler.jsonc` must be replaced first.
+- [ ] `GEMINI_API_KEY` and `GEMINI_MODEL` set on Vercel
+- [ ] `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` set on Vercel
+- [ ] `RATE_LIMIT_SECRET` set on Vercel
+- [ ] `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` set on Vercel
+- [ ] `NEXT_PUBLIC_SITE_URL=https://plotripple.vercel.app` (or your custom domain)
+- [ ] Turnstile widget allows the production hostname
+- [ ] Smoke-test generate and expand; confirm the 21st AI call returns `RATE_LIMITED`
 
 ## Environment variables
 
 | Variable | Required | Notes |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | For canonical URLs | Defaults to `http://localhost:3000` if unset so static pages can build. |
-| `GEMINI_API_KEY` | To generate | Server only. Validated when `/api/generate` runs, not during static builds. |
+| `NEXT_PUBLIC_SITE_URL` | For canonical URLs | Use `https://plotripple.vercel.app` in production until the custom domain is live. Defaults to `http://localhost:3000` in development. |
+| `GEMINI_API_KEY` | To generate | Server only. Validated when `/api/generate` or `/api/expand` runs, not during static builds. |
 | `GEMINI_MODEL` | Recommended | Falls back to `gemini-3.5-flash` if empty. |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Production | Shows the widget. |
 | `TURNSTILE_SECRET_KEY` | Production | Server verification. |
 | `RATE_LIMIT_SECRET` | Production | Used to hash rate-limit identifiers. |
+| `UPSTASH_REDIS_REST_URL` | Production | Upstash Redis REST endpoint. |
+| `UPSTASH_REDIS_REST_TOKEN` | Production | Upstash Redis REST token. |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Optional | Loads gtag with Consent Mode defaults denied. No CMP is included. |
 
-Cloudflare binding:
-
-- `RATE_LIMIT_KV` — Workers KV for generation limits.
+Configure the same names in the Vercel project settings. Never commit real secrets.
 
 ## Current limits
 
 - No accounts, database, or saved campaigns.
 - History is the last 5 generations in `localStorage` on this device.
-- Rate limiting is inactive until KV + `RATE_LIMIT_SECRET` are configured.
+- Without Upstash + `RATE_LIMIT_SECRET`, local development skips rate limiting with a warning; production returns a controlled 503 and must not ship that way.
 - Ad slots are labeled placeholders. AdSense is not wired.
 - Analytics events are prepared; the script loads only when a measurement ID exists, with analytics storage denied until a future consent tool grants it.
 - Generated text is a draft for the GM, not rules text for any published system.
@@ -163,6 +149,7 @@ Cloudflare binding:
 - Real AdSense or a cookie CMP
 - Extra generators (rumor, complication, quest) — cards only, no indexable empty pages
 - Automatic locale detection by IP or `Accept-Language`
+- Hosting adapters for non-Vercel runtimes
 
 ## Scripts
 
@@ -173,6 +160,3 @@ Cloudflare binding:
 | `npm start` | Serve the Next.js build |
 | `npm test` | Vitest once |
 | `npm run test:watch` | Vitest watch |
-| `npm run preview` | OpenNext + Wrangler local Worker |
-| `npm run deploy` | Build and deploy to Cloudflare Workers |
-| `npm run cf-typegen` | Generate `cloudflare-env.d.ts` |
