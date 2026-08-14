@@ -1,22 +1,17 @@
 export const analyticsEvents = [
   "generator_view",
+  "example_selected",
+  "advanced_options_opened",
   "generator_submit",
   "generator_success",
-  "generation_succeeded",
-  "generation_result_viewed",
-  "canvas_opened",
+  "generator_validation_error",
   "generator_error",
   "generator_rate_limited",
-  "generator_validation_error",
-  "generator_regenerate",
-  "history_opened",
   "result_copy",
   "result_regenerate",
-  "language_change",
+  "canvas_opened",
+  "history_opened",
   "language_changed",
-  "related_tool_click",
-  "advanced_options_opened",
-  "example_selected",
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];
@@ -30,8 +25,8 @@ export type AnalyticsParams = {
   result_count?: number;
   error_code?: string;
   duration_bucket?: string;
-  tool_id?: string;
   language?: string;
+  source?: "result" | "history";
 };
 
 declare global {
@@ -54,8 +49,8 @@ const allowedKeys = [
   "result_count",
   "error_code",
   "duration_bucket",
-  "tool_id",
   "language",
+  "source",
 ] as const;
 
 export function durationBucket(ms: number): string {

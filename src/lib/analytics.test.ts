@@ -7,6 +7,14 @@ import {
   trackEvent,
 } from "@/lib/analytics";
 
+const legacyAliases = [
+  "generation_succeeded",
+  "generation_result_viewed",
+  "generator_regenerate",
+  "language_change",
+  "related_tool_click",
+] as const;
+
 describe("allowedParams", () => {
   it("keeps only categorical analytics fields", () => {
     expect(
@@ -20,6 +28,7 @@ describe("allowedParams", () => {
         error_code: "VALIDATION_ERROR",
         duration_bucket: "2-5s",
         language: "pt-br",
+        source: "result",
       }),
     ).toEqual({
       locale: "pt-br",
@@ -31,18 +40,27 @@ describe("allowedParams", () => {
       error_code: "VALIDATION_ERROR",
       duration_bucket: "2-5s",
       language: "pt-br",
+      source: "result",
     });
   });
 
-  it("does not pass narrative text or personal data", () => {
+  it("does not pass narrative text, chronicle ids, or unknown fields", () => {
     const leaked = allowedParams({
       tone: "dark",
+      source: "history",
       eventDescription: "The party spared the scout",
       summary: "Generated story text",
+      title: "Scout mercy",
+      chronicle_id: "chr-mercy",
+      tool_id: "rumor-generator",
     } as unknown as Parameters<typeof allowedParams>[0]);
-    expect(leaked).toEqual({ tone: "dark" });
+
+    expect(leaked).toEqual({ tone: "dark", source: "history" });
     expect(JSON.stringify(leaked)).not.toContain("spared");
     expect(JSON.stringify(leaked)).not.toContain("Generated");
+    expect(JSON.stringify(leaked)).not.toContain("Scout mercy");
+    expect(JSON.stringify(leaked)).not.toContain("chr-mercy");
+    expect(leaked).not.toHaveProperty("tool_id");
   });
 });
 
@@ -60,7 +78,7 @@ describe("trackEvent", () => {
     vi.unstubAllGlobals();
   });
 
-  it("forwards existing event names through gtag", () => {
+  it("forwards canonical event names through gtag", () => {
     const gtag = vi.fn();
     vi.stubGlobal("window", { gtag });
 
@@ -69,6 +87,7 @@ describe("trackEvent", () => {
     trackEvent("language_changed", { language: "pt-br" });
     trackEvent("advanced_options_opened", { locale: "pt-br" });
     trackEvent("example_selected", { locale: "en" });
+    trackEvent("canvas_opened", { locale: "en", source: "result" });
 
     expect(gtag).toHaveBeenCalledWith("event", "generator_view", { locale: "en" });
     expect(gtag).toHaveBeenCalledWith("event", "generator_submit", { tone: "dark" });
@@ -81,29 +100,45 @@ describe("trackEvent", () => {
     expect(gtag).toHaveBeenCalledWith("event", "example_selected", {
       locale: "en",
     });
+    expect(gtag).toHaveBeenCalledWith("event", "canvas_opened", {
+      locale: "en",
+      source: "result",
+    });
   });
 
-  it("keeps the existing analytics event catalog", () => {
+  it("strips unknown keys before forwarding to gtag", () => {
+    const gtag = vi.fn();
+    vi.stubGlobal("window", { gtag });
+
+    trackEvent("result_copy", {
+      locale: "en",
+      summary: "Mercy leaves a trail of obligations.",
+    } as unknown as Parameters<typeof trackEvent>[1]);
+
+    expect(gtag).toHaveBeenCalledWith("event", "result_copy", { locale: "en" });
+    expect(JSON.stringify(gtag.mock.calls)).not.toContain("Mercy");
+  });
+
+  it("keeps the canonical analytics event catalog without legacy aliases", () => {
     expect(analyticsEvents).toEqual([
       "generator_view",
+      "example_selected",
+      "advanced_options_opened",
       "generator_submit",
       "generator_success",
-      "generation_succeeded",
-      "generation_result_viewed",
-      "canvas_opened",
+      "generator_validation_error",
       "generator_error",
       "generator_rate_limited",
-      "generator_validation_error",
-      "generator_regenerate",
-      "history_opened",
       "result_copy",
       "result_regenerate",
-      "language_change",
+      "canvas_opened",
+      "history_opened",
       "language_changed",
-      "related_tool_click",
-      "advanced_options_opened",
-      "example_selected",
     ]);
+
+    for (const alias of legacyAliases) {
+      expect(analyticsEvents).not.toContain(alias);
+    }
   });
 });
 
