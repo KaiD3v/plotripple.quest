@@ -5,6 +5,7 @@ import { GoogleTagLoaders } from "@/components/ads/google-tag-loaders";
 import { localeHtmlLang } from "@/i18n/config";
 import { BRAND_ASSETS } from "@/lib/brand";
 import { getAdSenseClientId, getGaMeasurementId, getSiteUrl } from "@/lib/env";
+import { Analytics } from "@vercel/analytics/next"
 import { DISABLE_GOOGLE_TAGS_HEADER } from "@/lib/google-tags-route";
 import "./globals.css";
 
@@ -56,6 +57,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           measurementId={measurementId}
           adsenseClientId={adsenseClientId}
         />
+        <Analytics />
       </body>
     </html>
   );
