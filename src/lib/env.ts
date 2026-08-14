@@ -3,7 +3,6 @@ export const DEFAULT_DEV_SITE_URL = "http://localhost:3000";
 export const DEFAULT_PROD_SITE_URL = "https://plotripple.quest";
 export const GEMINI_TIMEOUT_MS = 25_000;
 export const RATE_LIMIT_MAX = 20;
-export const RATE_LIMIT_WINDOW_SECONDS = 60 * 60 * 24;
 
 export type EnvSource = Record<string, string | undefined>;
 
@@ -58,4 +57,20 @@ export function getTurnstileSecret(env: EnvSource = process.env): string | undef
 export function getRateLimitSecret(env: EnvSource = process.env): string | undefined {
   const value = env.RATE_LIMIT_SECRET?.trim();
   return value ? value : undefined;
+}
+
+export type UpstashRedisConfig = {
+  url: string;
+  token: string;
+};
+
+export function getUpstashRedisConfig(
+  env: EnvSource = process.env,
+): UpstashRedisConfig | null {
+  const url = env.UPSTASH_REDIS_REST_URL?.trim();
+  const token = env.UPSTASH_REDIS_REST_TOKEN?.trim();
+  if (!url || !token) {
+    return null;
+  }
+  return { url, token };
 }

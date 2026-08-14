@@ -5,6 +5,7 @@ import {
   DEFAULT_PROD_SITE_URL,
   getGeminiRuntimeEnv,
   getSiteUrl,
+  getUpstashRedisConfig,
 } from "@/lib/env";
 
 describe("getSiteUrl", () => {
@@ -47,6 +48,30 @@ describe("getGeminiRuntimeEnv", () => {
     ).toEqual({
       apiKey: "test-key",
       model: "gemini-3.6-flash",
+    });
+  });
+});
+
+describe("getUpstashRedisConfig", () => {
+  it("returns null when either REST credential is missing", () => {
+    expect(getUpstashRedisConfig({})).toBeNull();
+    expect(
+      getUpstashRedisConfig({ UPSTASH_REDIS_REST_URL: "https://example.upstash.io" }),
+    ).toBeNull();
+    expect(
+      getUpstashRedisConfig({ UPSTASH_REDIS_REST_TOKEN: "token" }),
+    ).toBeNull();
+  });
+
+  it("returns trimmed URL and token when both are set", () => {
+    expect(
+      getUpstashRedisConfig({
+        UPSTASH_REDIS_REST_URL: " https://example.upstash.io ",
+        UPSTASH_REDIS_REST_TOKEN: " token ",
+      }),
+    ).toEqual({
+      url: "https://example.upstash.io",
+      token: "token",
     });
   });
 });
